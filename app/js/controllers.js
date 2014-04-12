@@ -4,41 +4,59 @@
 
 var url = "https://meetup2014.firebaseIO.com";
 
-angular.module('myApp.controllers', ['firebase'])
-.controller('userCtrl', ["$scope", "$rootScope", "$firebase", "$firebaseSimpleLogin", function($scope, $rootScope, $firebase,$firebaseSimpleLogin) {
+angular.module('myApp.controllers', ['firebase','ngCookies'])
+.controller('userCtrl', ["$scope", "$rootScope", "$firebase", "$firebaseSimpleLogin", "$cookies", function($scope, $rootScope, $firebase,$firebaseSimpleLogin, $cookies) {
 	
-	var ref = new Firebase(url+"/Users");
+	var ref = new Firebase(url + "/Users");
 	$scope.users = $firebase(ref);
-	$scope.auth = $firebaseSimpleLogin(ref);
+	$rootScope.auth = $firebaseSimpleLogin(ref);
 
-	$scope.login = function(){
-		$scope.auth.$login('facebook', {rememberMe: false, scope:'email,basic_info'});
-		$rootScope.id = $scope.auth.user.id;
-		if (!$scope.users.$child(id)){
-			alert("hello");
-			upload();
-		}
-	}
+	$rootScope.$watch('auth.user', upload, true);
 
 	function upload(){
-		var email = $scope.auth.user.email;
-		var pic = "https://graph.facebook.com/{{auth.user.id}}/picture";
-		var name = $scope.auth.user.name;
-		$scope.users.$child(id).$set({email:email, pic:pic, Username: name});
+		if (!$rootScope.auth.user){
+			return;
+		}
+		var id = $cookies.id = $rootScope.auth.user.id;
+		if (!$scope.users[id]){
+			var email = $scope.auth.user.email;
+			var pic = "https://graph.facebook.com/" + id + "/picture";
+			var name = $scope.auth.user.name;
+			$scope.users.$child(id).$set({email:email, pic:pic, Username: name});
+		}
 	};
 
 }])  
-.controller('PrivateCtrl', ["$scope", "$rootScope", "$firebase", function($scope, $rootScope, $firebase) {
+.controller('PrivateCtrl', ["$scope", "$rootScope", "$firebase", "$cookies", function($scope, $rootScope, $firebase, $cookies) {
 
-	$rootScope.$watch('auth.user', getEvents);
+	getEvents();
 
-	if ($rootScope.auth.user){
-		getEvents();
-	}
+	$scope.picker = new Pikaday(
+	{
+		field: $('#datepicker')[0],
+		firstDay: 1,
+		minDate: new Date(),
+		maxDate: new Date('2020-12-31'),
+		onSelect: function() {
+			$scope.events.$add({concise: $scope.concise, date: this.toString(), complete: false});
+			$scope.concise = "";
+			this.gotoToday();
+		}
+	});
+
+	$scope.toggleCompleted = function (id) {
+		setTimeout(function() {
+			var event = $scope.events[id];
+			event.complete = !event.complete;
+			$scope.events.$save(id);
+		}, 200);
+
+	};
+
 
 	function getEvents(){
-		$scope.privateE = $rootScope.root.$child('Private')
-		$scope.events = $scope.privateE.$child('UserID');
+		var ref = new Firebase(url + "/Private/" + $cookies.id);
+		$scope.events = $firebase(ref);
 	}
 
 

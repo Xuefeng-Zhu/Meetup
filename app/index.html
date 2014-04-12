@@ -5,6 +5,8 @@
   <title>Meetup</title>
   <link rel="stylesheet" type="text/css" href="css/semantic.css">
   <link rel="stylesheet" href="css/app.css"/>
+  <link rel="stylesheet" href="css/pikaday.css"/>
+
 
   <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.js"></script>
   <script src="lib/semantic.js"></script>
@@ -15,7 +17,7 @@
     <div class="four wide column" id="ldock">
       <div class="ui attached raised center aligned tertiary green inverted segment" ng-controller="userCtrl">
 
-        <div ng-hide="auth.user" ng-click="login()" class="ui facebook button" id="login">
+        <div ng-hide="auth.user" ng-click="auth.$login('facebook', {rememberMe: false, scope:'email,basic_info'})" class="ui facebook button" id="login">
           <i class="facebook icon"></i>
           Facebook
         </div>
@@ -23,7 +25,7 @@
         <div ng-show="auth.user" id="afterLogin">
           <img class="ui rounded mini image" id="userpic"src="https://graph.facebook.com/{{auth.user.id}}/picture">
           <div class="positive ui button" id="message">Messages</div>
-          <a id="setting" ng-click="auth.$logout()" href=""><i class="big setting icon"></i></a>
+          <a id="setting" ng-click="auth.$logout(); id=null;" href=""><i class="big setting icon"></i></a>
         </div>
       </div>
       <div class="ui attached fluid large vertical pointing menu" id="events">
@@ -31,10 +33,10 @@
           <i class="user icon"></i>
           Private
         </div>
-        <div class="active item">
+        <a class="active item" ng-href="#/Private">
           All
           <div class="ui red label">4</div>
-        </div>
+        </a>
         <a class="item">
           Dance
           <div class="ui red label">1</div>
@@ -89,9 +91,12 @@
 -->
 
 
+<script src="lib/pikaday.js"></script>
 
 <script src="lib/angular/angular.js"></script>
 <script src="lib/angular/angular-route.js"></script>
+<script src="lib/angular/angular-cookies.js"></script>
+
 
 <script src="https://cdn.firebase.com/js/client/1.0.11/firebase.js"></script>
 <script src='https://cdn.firebase.com/libs/angularfire/0.7.1/angularfire.min.js'></script>

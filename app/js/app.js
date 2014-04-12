@@ -15,7 +15,7 @@ config(['$routeProvider', function($routeProvider) {
 		templateUrl: 'partials/private.html', 
 		controller: 'PrivateCtrl'
 	});
-	$routeProvider.otherwise({
-		redirectTo: '/Private'
-	});
+//	$routeProvider.otherwise({
+//		redirectTo: '/Private'
+//	});
 }]);

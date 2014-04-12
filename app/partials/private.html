@@ -1,0 +1,29 @@
+<div class="ui teal stacked segment">
+ <div class="ui fluid action  input">
+   <input type="text" ng-model="concise" placeholder="New Events">
+   <div class="ui teal left labeled icon button" id="datepicker" ng-click="pickDate()">
+     <i class="calendar icon"></i> Date
+   </div>
+ </div>
+</div>
+<div class="ui segment" ng-repeat="(eid,event) in events | eventFilter:false">
+  <div class="ui toggle checkbox">
+    <input type="checkbox" name="event" id="{{eid}}" ng-click="toggleCompleted(eid)">
+    <label for="{{eid}}"></label>
+  </div>
+  <b style="display:inline">{{event.concise}}</b>
+  <p class="dueDate">{{event.date}}</p>
+</div>
+
+<div class="ui horizontal icon divider">
+  <i class="circular attachment icon"></i>
+</div>
+
+<div class="ui segment" ng-repeat="(eid,event) in events | eventFilter:true">
+  <div class="ui toggle checkbox">
+    <input type="checkbox" ng-checked="true" name="event" id="{{eid}}" ng-click="toggleCompleted(eid)">
+    <label for="{{eid}}"></label>
+  </div>
+  <b style="display:inline">{{event.concise}}</b>
+  <i class="large remove icon" style="float:right"></i>
+</div>

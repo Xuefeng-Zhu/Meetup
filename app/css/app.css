@@ -49,3 +49,16 @@ body {
   padding-left: 3em;
   padding-right: 3em;
 }
+
+.dueDate{
+  display: inline;
+  float: right;
+  margin: 0em;
+  color: grey;
+}
+
+i.icon.remove:hover{
+  -webkit-transform: scale(1.5);
+  transform: scale(1.5);
+  color: red;
+}
