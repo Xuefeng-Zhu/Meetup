@@ -61,8 +61,14 @@ i.icon.remove:hover{
   -webkit-transform: scale(1.5);
   transform: scale(1.5);
   color: red;
+  cursor: pointer;
 }
 
 .event{
   cursor:alias;
+}
+
+.eventDetails{
+  background: url(../images/notebook.png) repeat-y;
+
 }

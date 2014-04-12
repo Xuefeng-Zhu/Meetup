@@ -31,6 +31,7 @@ angular.module('myApp.controllers', ['firebase','ngCookies'])
 
 	$scope.concise = "";
 	$scope.selectEvent = null;
+	$scope.selectID = null;
 	getEvents();
 
 	$scope.picker = new Pikaday(
@@ -49,6 +50,14 @@ angular.module('myApp.controllers', ['firebase','ngCookies'])
 			$scope.concise = "";
 			this.gotoToday();
 		}
+	});
+
+	$scope.picker2 = new Pikaday(
+	{
+		field: $('#datepicker2')[0],
+		firstDay: 1,
+		minDate: new Date(),
+		maxDate: new Date('2020-12-31'),
 	});
 
 	$scope.toggleCompleted = function(id){
@@ -77,8 +86,35 @@ angular.module('myApp.controllers', ['firebase','ngCookies'])
 
 	$scope.showEvent = function(id){
 		$scope.selectEvent = $scope.events[id];
-		$('.overlay.sidebar').sidebar('toggle');
+		$scope.originalEvent = angular.extend({}, $scope.selectEvent);
+		$scope.selectID = id; 
+		$scope.picker2.setDate($scope.selectEvent.date);
+		$('.overlay.sidebar') .sidebar({
+			overlay: true})
+		.sidebar('toggle');
 	};
+
+	$scope.saveEvent = function(){
+		$scope.events.$save($scope.selectID);
+		$scope.selectEvent = null;
+		$scope.originalEvent = null;
+		$scope.selectID = null; 
+
+		$('.overlay.sidebar') .sidebar({
+			overlay: true})
+		.sidebar('toggle');
+	}
+
+	$scope.cancelEvent = function(){
+		$scope.events[$scope.selectID] = $scope.originalEvent;
+		$scope.selectEvent = null;
+		$scope.originalEvent = null;
+		$scope.selectID = null; 
+
+		$('.overlay.sidebar') .sidebar({
+			overlay: true})
+		.sidebar('toggle');
+	}
 
 	function getEvents(){
 		var ref = new Firebase(url + "/Private/" + $cookies.id);
