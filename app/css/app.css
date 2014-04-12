@@ -17,8 +17,8 @@ body {
 }
 
 #events{
-  height: 30rem;
   overflow-y: scroll;
+  height: 30rem;
 }
 
 #ldock{
@@ -26,15 +26,26 @@ body {
   margin-bottom: 0rem;
   padding-left: 0.1%;
   padding-right: 0%;
+  height: 100%;
+
 }
 
 #userpic{
   display: inline;
+  float: left;
 }
 
 #message{
-  margin-left: 1em;
-  margin-right: 1em;
+  padding-left: 3em;
+  padding-right: 3em;
+}
+
+#setting{
+  display: inline;
+  float: right;
+}
+
+#login{
   padding-left: 3em;
   padding-right: 3em;
 }
