@@ -62,3 +62,7 @@ i.icon.remove:hover{
   transform: scale(1.5);
   color: red;
 }
+
+.event{
+  cursor:alias;
+}

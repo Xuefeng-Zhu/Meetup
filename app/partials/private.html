@@ -1,12 +1,16 @@
 <div class="ui teal stacked segment">
- <div class="ui fluid action  input">
-   <input type="text" ng-model="concise" placeholder="New Events">
-   <div class="ui teal left labeled icon button" id="datepicker" ng-click="pickDate()">
-     <i class="calendar icon"></i> Date
+  <form class="ui form" ng-submit="addEvent()">
+   <div class="ui fluid action input">
+     <input type="text" ng-model="concise" placeholder="New Events" ngrequired>
+     <div class="ui teal left labeled icon button" id="datepicker" ng-click="pickDate()">
+       <i class="calendar icon"></i> Date
+     </div>
    </div>
- </div>
+ </form>
 </div>
-<div class="ui segment" ng-repeat="(eid,event) in events | eventFilter:false">
+
+
+<div class="ui segment event" ng-repeat="(eid,event) in events | eventFilter:false" ng-click="showEvent()">
   <div class="ui toggle checkbox">
     <input type="checkbox" name="event" id="{{eid}}" ng-click="toggleCompleted(eid)">
     <label for="{{eid}}"></label>
@@ -19,11 +23,35 @@
   <i class="circular attachment icon"></i>
 </div>
 
+
 <div class="ui segment" ng-repeat="(eid,event) in events | eventFilter:true">
   <div class="ui toggle checkbox">
     <input type="checkbox" ng-checked="true" name="event" id="{{eid}}" ng-click="toggleCompleted(eid)">
     <label for="{{eid}}"></label>
   </div>
   <b style="display:inline">{{event.concise}}</b>
-  <i class="large remove icon" style="float:right"></i>
+  <i class="large remove icon" style="float:right" ng-click="removeEvent(eid)"></i>
+</div>
+
+
+<div class="ui red vertical right very wide floating overlay sidebar menu">
+  <a class="item">
+    <i class="home icon"></i>
+    Home
+  </a>
+  <a class="active item">
+    <i class="heart icon"></i>
+    Current Section
+  </a>
+  <a class="item">
+    <i class="facebook icon"></i>
+    Like us on Facebook
+  </a>
+  <div class="item">
+    <b>More</b>
+    <div class="menu">
+      <a class="item">About</a>
+      <a class="item">Contact Us</a>
+    </div>
+  </div>
 </div>

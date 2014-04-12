@@ -29,6 +29,8 @@ angular.module('myApp.controllers', ['firebase','ngCookies'])
 }])  
 .controller('PrivateCtrl', ["$scope", "$rootScope", "$firebase", "$cookies", function($scope, $rootScope, $firebase, $cookies) {
 
+	$scope.concise = "";
+	$scope.selectEvent = null;
 	getEvents();
 
 	$scope.picker = new Pikaday(
@@ -38,13 +40,18 @@ angular.module('myApp.controllers', ['firebase','ngCookies'])
 		minDate: new Date(),
 		maxDate: new Date('2020-12-31'),
 		onSelect: function() {
+			if (!$scope.concise || $scope.concise == "")
+			{
+				alert("Please input event information");
+				return;
+			}
 			$scope.events.$add({concise: $scope.concise, date: this.toString(), complete: false});
 			$scope.concise = "";
 			this.gotoToday();
 		}
 	});
 
-	$scope.toggleCompleted = function (id) {
+	$scope.toggleCompleted = function(id){
 		setTimeout(function() {
 			var event = $scope.events[id];
 			event.complete = !event.complete;
@@ -53,11 +60,31 @@ angular.module('myApp.controllers', ['firebase','ngCookies'])
 
 	};
 
+	$scope.addEvent = function(){
+		var concise = $scope.concise.trim();
+		if (concise == "") {
+			alert("Please input event information");
+			return;
+		}
+		$scope.events.$add({concise: concise, date: $scope.picker.toString(), complete: false});
+		$scope.picker.gotoToday();
+		$scope.concise = '';
+	}
+
+	$scope.removeEvent = function(id){
+		$scope.events.$remove(id);
+	};
+
+	$scope.showEvent = function(id){
+		$scope.selectEvent = $scope.events[id];
+		$('.overlay.sidebar').sidebar('toggle');
+	};
 
 	function getEvents(){
 		var ref = new Firebase(url + "/Private/" + $cookies.id);
 		$scope.events = $firebase(ref);
 	}
+
 
 
 }])
