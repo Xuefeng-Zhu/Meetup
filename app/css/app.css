@@ -30,6 +30,11 @@ body {
 
 }
 
+#searchButton:hover
+{
+  cursor:pointer;
+}
+
 #userpic{
   display: inline;
   float: left;
@@ -64,7 +69,7 @@ i.icon.remove:hover{
   cursor: pointer;
 }
 
-.event{
+.event:hover{
   cursor:alias;
 }
 

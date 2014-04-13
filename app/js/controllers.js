@@ -23,15 +23,54 @@ angular.module('myApp.controllers', ['firebase','ngCookies'])
 			var pic = "https://graph.facebook.com/" + id + "/picture";
 			var name = $scope.auth.user.name;
 			$scope.users.$child(id).$set({email:email, pic:pic, Username: name});
+			ref = new Firebase(url + "/Private/" + id +"/categories");
+			ref.child("All").set({name: "All", number: 0});
 		}
 	};
 
 }])  
-.controller('PrivateCtrl', ["$scope", "$rootScope", "$firebase", "$cookies", function($scope, $rootScope, $firebase, $cookies) {
+.controller('listCtrl', ["$scope", "$rootScope", "$firebase", "$cookies", function($scope, $rootScope, $firebase, $cookies) {
+	
+	getCategories();
+
+	$scope.selectLid = null;
+	$scope.PrvLflag = false;
+
+	$scope.selectList = function(lid){
+		$scope.selectLid = lid;
+	};
+
+	$scope.addPrvL = function(){
+		$scope.PrvLflag = true;
+	};
+
+	$scope.cancelPrvL = function(){
+		$scope.PrvLflag = false;
+		$scope.newList = "";
+	};
+
+	$scope.savePrvl = function(e){
+		if (e.keyCode != 13 || $scope.newList == ""){
+			return;
+		}
+		$rootScope.prvCs.$child($scope.newList).$set({name: $scope.newList, number: 0});
+		$scope.cancelPrvL();
+	};
+
+
+	function getCategories(){
+		var ref = new Firebase(url + "/Private/" + $cookies.id + "/categories");
+		$rootScope.prvCs = $firebase(ref);
+	}
+}])  
+.controller('PrivateCtrl', ["$scope", "$rootScope", "$firebase", "$cookies", "$routeParams", function($scope, $rootScope, $firebase, $cookies, $routeParams) {
 
 	$scope.concise = "";
 	$scope.selectEvent = null;
 	$scope.selectID = null;
+	var category = $routeParams["list"];
+	$scope.search = $routeParams["search"];
+
 	getEvents();
 
 	$scope.picker = new Pikaday(
@@ -46,7 +85,13 @@ angular.module('myApp.controllers', ['firebase','ngCookies'])
 				alert("Please input event information");
 				return;
 			}
-			$scope.events.$add({concise: $scope.concise, date: this.toString(), complete: false});
+			$scope.events.$add({concise: $scope.concise, date: this.toString(), complete: false, category: category});
+			if (category != "All"){
+				$rootScope.prvCs[category]["number"]++;
+				$rootScope.prvCs.$save(category);
+			}
+			$rootScope.prvCs["All"]["number"]++;
+			$rootScope.prvCs.$save("All");
 			$scope.concise = "";
 			this.gotoToday();
 		}
@@ -65,6 +110,24 @@ angular.module('myApp.controllers', ['firebase','ngCookies'])
 			var event = $scope.events[id];
 			event.complete = !event.complete;
 			$scope.events.$save(id);
+			if (event.complete)
+			{
+				if (category != "All"){
+					$rootScope.prvCs[category]["number"]--;
+					$rootScope.prvCs.$save(category);
+				}
+				$rootScope.prvCs["All"]["number"]--;
+				$rootScope.prvCs.$save("All");
+			}
+			else{
+				if (category != "All"){
+					$rootScope.prvCs[category]["number"]++;
+					$rootScope.prvCs.$save(category);
+				}
+				$rootScope.prvCs["All"]["number"]++;
+				$rootScope.prvCs.$save("All");
+			}
+
 		}, 200);
 
 	};
@@ -76,6 +139,13 @@ angular.module('myApp.controllers', ['firebase','ngCookies'])
 			return;
 		}
 		$scope.events.$add({concise: concise, date: $scope.picker.toString(), complete: false});
+		if (category != "All"){
+			$rootScope.prvCs[category]["number"]++;
+			$rootScope.prvCs.$save(category);
+		}
+		$rootScope.prvCs["All"]["number"]++;
+		$rootScope.prvCs.$save("All");
+
 		$scope.picker.gotoToday();
 		$scope.concise = '';
 	}
@@ -117,13 +187,16 @@ angular.module('myApp.controllers', ['firebase','ngCookies'])
 	}
 
 	function getEvents(){
-		var ref = new Firebase(url + "/Private/" + $cookies.id);
+		var ref = new Firebase(url + "/Private/" + $cookies.id + "/events");
 		$scope.events = $firebase(ref);
 	}
 
 
-
 }])
-.controller('MyCtrl2', [function() {
+.controller('searchCtrl', ["$scope","$location", function($scope, $location) {
 
+	$scope.search = function(){
+		$location.search({search: $scope.searchEvent});
+
+	}
 }]);

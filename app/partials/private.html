@@ -10,7 +10,7 @@
 </div>
 
 
-<div class="ui segment event" ng-repeat="(eid,event) in events | eventFilter:false" ng-click="showEvent(eid)">
+<div class="ui segment event" ng-repeat="(eid,event) in events | eventFilter:false " ng-click="showEvent(eid)">
   <div class="ui toggle checkbox">
     <input type="checkbox" name="event" id="{{eid}}" ng-click="toggleCompleted(eid)">
     <label for="{{eid}}"></label>

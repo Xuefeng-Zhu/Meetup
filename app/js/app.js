@@ -11,7 +11,7 @@ angular.module('myApp', [
 	'myApp.controllers'
 	]).
 config(['$routeProvider', function($routeProvider) {
-	$routeProvider.when('/Private', {
+	$routeProvider.when('/Private/:list', {
 		templateUrl: 'partials/private.html', 
 		controller: 'PrivateCtrl'
 	});

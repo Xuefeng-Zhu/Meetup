@@ -28,62 +28,77 @@
           <a id="setting" ng-click="auth.$logout(); id=null;" href=""><i class="big setting icon"></i></a>
         </div>
       </div>
-      <div class="ui attached fluid large vertical pointing menu" id="events">
+
+      <div class="ui attached fluid large vertical menu" id="events" ng-controller="listCtrl">
         <div class="header item">
           <i class="user icon"></i>
           Private
         </div>
-        <a class="active item" ng-href="#/Private">
-          All
-          <div class="ui red label">4</div>
-        </a>
-        <a class="item">
-          Dance
-          <div class="ui red label">1</div>
-        </a>
-        <a class="item">
+
+        <div ng-repeat="(lid, category) in prvCs">
+          <a class="item" ng-class="{active: lid==selectLid}" ng-href="#/Private/{{category.name}}" ng-click="selectList(lid)">
+            {{category.name}}
+            <div class="ui red label">{{category.number}}</div>
+          </a>
+        </div>
+
+        
+
+        <a class="item" ng-hide="PrvLflag" ng-click="addPrvL()">
           <i class="plus icon"></i>
           Add a List
         </a>
-        <div class="header item">
-          <i class="users icon"></i>
-          Collaborating
-        </div>
-        <a class="item">
-          All
-        </a>
 
-        <a class="item">
-          <i class="plus icon"></i>
-          Add a List
-        </a>
-        <div class="header item">
-          <i class="icon rss"></i>
-          Public
+
+        <div class="fuild item" ng-show="PrvLflag">
+          <div class="ui action small  input">
+            <input type="text" placeholder="New Listname" ng-model="newList" ng-keydown="savePrvl($event)">
+            <div class="ui button" ng-click="cancelPrvL()">Cancel</div>
+          </div>
         </div>
-        <a class="item">
-          New
-        </a>
-        <a class="item">
-          Hot
-        </a>
-        <a class="item">
-          <i class="plus icon"></i>
-          Add Categories
-        </a>
+
+
+
+          <div class="header item">
+            <i class="users icon"></i>
+            Collaborating
+          </div>
+          <a class="item">
+            All
+          </a>
+
+          <a class="item">
+            <i class="plus icon"></i>
+            Add a List
+          </a>
+          <div class="header item">
+            <i class="icon rss"></i>
+            Public
+          </div>
+          <a class="item">
+            New
+          </a>
+          <a class="item">
+            Hot
+          </a>
+          <a class="item">
+            <i class="plus icon"></i>
+            Add Categories
+          </a>
+        </div>
+
+        <div class="ui attached segment" ng-controller="searchCtrl">
+          <div class="ui fluid icon input">
+            <input type="text" placeholder="Search Events..." ng-model="searchEvent">
+            <i class="blue inverted search icon" id="searchButton" ng-click="search()"></i>
+          </div>
+        </div>
       </div>
-      <div class="ui attached segment">
-        <div class="ui fluid icon input">
-          <input type="text" placeholder="Search Events...">
-          <i class="blue inverted search icon"></i>
-        </div>
+
+      <div class="twelve wide column">
+        <div ng-view></div>
       </div>
     </div>
-
-    <div class="twelve wide column">
-      <div ng-view></div>
-    </div>
-  </div>
 
 
   <!-- In production use:
