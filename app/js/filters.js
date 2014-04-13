@@ -15,7 +15,7 @@ angular.module('myApp.filters', [])
       if (complete){
         if (event.complete && (list=="All" || event.category == list)){
 
-          if (search){
+          if (search && event.concise){
             if (event.concise.indexOf(search) != -1){
               filtered[id] = event;
             }
@@ -27,7 +27,7 @@ angular.module('myApp.filters', [])
       }
       else{
         if (!event.complete && (list=="All" || event.category == list)){
-          if (search){
+          if (search && event.concise){
             if (event.concise.indexOf(search) != -1){
               filtered[id] = event;
             }

@@ -12,6 +12,11 @@ angular.module('myApp.controllers', ['firebase','ngCookies'])
 
 	$rootScope.$watch('auth.user', upload, true);
 
+	$scope.logout = function(){
+		$rootScope.auth.$logout();
+		$cookies.id = null;
+	}
+
 	function upload(){
 		if (!$rootScope.auth.user){
 			return;
@@ -35,6 +40,7 @@ angular.module('myApp.controllers', ['firebase','ngCookies'])
 	$scope.selectLid = null;
 	$scope.PrvLflag = false;
 
+	
 	$scope.selectList = function(lid){
 		$scope.selectLid = lid;
 	};
@@ -274,7 +280,7 @@ angular.module('myApp.controllers', ['firebase','ngCookies'])
 		$scope.pCategory = "Category";
 				startdraw();
 
-		$('.modal')
+		$('#draw-modal')
 		.modal('setting', {
 			closable  : true,
 		})

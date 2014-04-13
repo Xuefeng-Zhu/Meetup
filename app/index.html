@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="css/pikaday.css"/>
 
 
-  <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.js"></script>
   <script src="lib/semantic.js"></script>
 
 
@@ -26,7 +26,7 @@
         <div ng-show="auth.user" id="afterLogin">
           <img class="ui rounded mini image" id="userpic"src="https://graph.facebook.com/{{auth.user.id}}/picture">
           <div class="positive ui button" id="message">Messages</div>
-          <a id="setting" ng-click="auth.$logout(); id=null;" href=""><i class="big setting icon"></i></a>
+          <a id="setting" ng-click="logout();" href=""><i class="big setting icon"></i></a>
         </div>
       </div>
 
