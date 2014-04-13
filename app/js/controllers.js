@@ -3,7 +3,6 @@
 /* Controllers */
 
 var url = "https://meetup2014.firebaseIO.com";
-
 angular.module('myApp.controllers', ['firebase','ngCookies'])
 .controller('userCtrl', ["$scope", "$rootScope", "$firebase", "$firebaseSimpleLogin", "$cookies", function($scope, $rootScope, $firebase,$firebaseSimpleLogin, $cookies) {
 	
@@ -18,7 +17,7 @@ angular.module('myApp.controllers', ['firebase','ngCookies'])
 			return;
 		}
 		var id = $cookies.id = $rootScope.auth.user.id;
-		if (!$scope.users[id]){
+		if (!$cookies.id){
 			var email = $scope.auth.user.email;
 			var pic = "https://graph.facebook.com/" + id + "/picture";
 			var name = $scope.auth.user.name;
@@ -85,7 +84,9 @@ angular.module('myApp.controllers', ['firebase','ngCookies'])
 				alert("Please input event information");
 				return;
 			}
+
 			$scope.events.$add({concise: $scope.concise, date: this.toString(), complete: false, category: category});
+
 			if (category != "All"){
 				$rootScope.prvCs[category]["number"]++;
 				$rootScope.prvCs.$save(category);
@@ -164,6 +165,44 @@ angular.module('myApp.controllers', ['firebase','ngCookies'])
 		.sidebar('toggle');
 	};
 
+	$scope.publishEvent = function(){
+		$scope.pCategory = "Category";
+		$('.basic.modal')
+		.modal('setting', {
+			closable  : true,
+			onDeny    : function(){
+
+			},
+			onApprove : function() {
+				if ($scope.pCategory == "Category")
+				{
+					alert("Please choose the Category to add");
+					return false;
+				}
+
+				var ref = new Firebase(url + "/Public/events/" + $scope.pCategory);
+				$firebase(ref).$child($scope.selectID).$set($scope.selectEvent);
+				var ref = new Firebase(url + "/Public/events/New");
+				$firebase(ref).$child($scope.selectID).$set($scope.selectEvent);
+				var ref = new Firebase(url + "/Collaborating/events");
+				$firebase(ref).$child($scope.selectID).$set($scope.selectEvent);
+
+				var ref = new Firebase(url + "/Collaborating/users/" + $cookies.id);
+				$firebase(ref).$add($scope.selectID);
+
+			}
+		})
+		.modal('show')
+		;
+
+		$('.ui.dropdown')
+		.dropdown('setting',{
+			onChange :function(value, text){
+				$scope.pCategory = text;
+			}
+		});
+	}
+
 	$scope.saveEvent = function(){
 		$scope.events.$save($scope.selectID);
 		$scope.selectEvent = null;
@@ -191,6 +230,209 @@ angular.module('myApp.controllers', ['firebase','ngCookies'])
 		$scope.events = $firebase(ref);
 	}
 
+
+}])
+.controller('CollabCtrl', ["$scope", "$rootScope", "$firebase", "$cookies", "$routeParams", function($scope, $rootScope, $firebase, $cookies, $routeParams) {
+
+	$scope.selectEvent = null;
+	$scope.selectID = null;
+	var category = $routeParams["list"];
+	$scope.search = $routeParams["search"];
+
+	getEvents();
+
+
+	$scope.showEvent = function(id){
+		$("#meetup").click(TowTruck);
+		$scope.selectEvent = $scope.events[id];
+		$scope.originalEvent = angular.extend({}, $scope.selectEvent);
+		$scope.selectID = id; 
+		$('.overlay.sidebar') .sidebar({
+			overlay: true})
+		.sidebar('toggle');
+	};
+
+	$scope.addComment = function(){
+		$scope.events.$child($scope.selectID).$child("comments").$add({ author: $rootScope.auth.user.name, pic:"https://graph.facebook.com/" + $cookies.id + "/picture", content: $scope.newComment});
+		$scope.selectEvent = $scope.events.$child($scope.selectID);
+		$scope.newComment = "";
+	};
+
+
+	$scope.cancelEvent = function(){
+		$scope.events[$scope.selectID] = $scope.originalEvent;
+		$scope.selectEvent = null;
+		$scope.originalEvent = null;
+		$scope.selectID = null; 
+
+		$('.overlay.sidebar') .sidebar({
+			overlay: true})
+		.sidebar('toggle');
+	}
+
+	$scope.meetup = function(){
+
+		$scope.pCategory = "Category";
+				startdraw();
+
+		$('.modal')
+		.modal('setting', {
+			closable  : true,
+		})
+		.modal('show');
+
+	}
+
+	function startdraw() {
+    //Set up some globals
+    var pixSize = 8, lastPoint = null, currentColor = "000", mouseDown = 0;
+
+    //Create a reference to the pixel data for our drawing.
+    var pixelDataRef = new Firebase(url + "/temp");
+
+    // Set up our canvas
+    var myCanvas = document.getElementById('drawing-canvas');
+    var myContext = myCanvas.getContext ? myCanvas.getContext('2d') : null;
+    if (myContext == null) {
+      alert("You must use a browser that supports HTML5 Canvas to run this demo.");
+      return;
+    }
+
+    //Setup each color palette & add it to the screen
+    var colors = ["fff","000","f00","0f0","00f","88f","f8d","f88","f05","f80","0f8","cf0","08f","408","ff8","8ff"];
+    for (var c in colors) {
+      var item = $('<div/>').css("background-color", '#' + colors[c]).addClass("colorbox");
+      item.click((function () {
+        var col = colors[c];
+        return function () {
+          currentColor = col;
+        };
+      })());
+      item.appendTo('#colorholder');
+    }
+
+    //Keep track of if the mouse is up or down
+    myCanvas.onmousedown = function () {mouseDown = 1;};
+    myCanvas.onmouseout = myCanvas.onmouseup = function () {
+      mouseDown = 0; lastPoint = null;
+    };
+
+    //Draw a line from the mouse's last position to its current position
+    var drawLineOnMouseMove = function(e) {
+      if (!mouseDown) return;
+
+      e.preventDefault();
+
+      // Bresenham's line algorithm. We use this to ensure smooth lines are drawn
+      var offset = $('canvas').offset();
+      var x1 = Math.floor((e.pageX - offset.left) / pixSize - 1),
+        y1 = Math.floor((e.pageY - offset.top) / pixSize - 1);
+      var x0 = (lastPoint == null) ? x1 : lastPoint[0];
+      var y0 = (lastPoint == null) ? y1 : lastPoint[1];
+      var dx = Math.abs(x1 - x0), dy = Math.abs(y1 - y0);
+      var sx = (x0 < x1) ? 1 : -1, sy = (y0 < y1) ? 1 : -1, err = dx - dy;
+      while (true) {
+        //write the pixel into Firebase, or if we are drawing white, remove the pixel
+        pixelDataRef.child(x0 + ":" + y0).set(currentColor === "fff" ? null : currentColor);
+
+        if (x0 == x1 && y0 == y1) break;
+        var e2 = 2 * err;
+        if (e2 > -dy) {
+          err = err - dy;
+          x0 = x0 + sx;
+        }
+        if (e2 < dx) {
+          err = err + dx;
+          y0 = y0 + sy;
+        }
+      }
+      lastPoint = [x1, y1];
+    };
+    $(myCanvas).mousemove(drawLineOnMouseMove);
+    $(myCanvas).mousedown(drawLineOnMouseMove);
+
+    // Add callbacks that are fired any time the pixel data changes and adjusts the canvas appropriately.
+    // Note that child_added events will be fired for initial pixel data as well.
+    var drawPixel = function(snapshot) {
+      var coords = snapshot.name().split(":");
+      myContext.fillStyle = "#" + snapshot.val();
+      myContext.fillRect(parseInt(coords[0]) * pixSize, parseInt(coords[1]) * pixSize, pixSize, pixSize);
+    };
+    var clearPixel = function(snapshot) {
+      var coords = snapshot.name().split(":");
+      myContext.clearRect(parseInt(coords[0]) * pixSize, parseInt(coords[1]) * pixSize, pixSize, pixSize);
+    };
+    pixelDataRef.on('child_added', drawPixel);
+    pixelDataRef.on('child_changed', drawPixel);
+    pixelDataRef.on('child_removed', clearPixel);
+  }
+
+	function getEvents(){
+		var ref = new Firebase(url + "/Collaborating/users");
+		$scope.eventIDs = $firebase(ref).$child($cookies.id);
+		$scope.events = [];
+		setTimeout(function(){
+			for(var id in $scope.eventIDs){
+				if (id.indexOf('$') == -1)
+				{		
+					ref = new Firebase(url + "/Collaborating/events/" + $scope.eventIDs[id]);
+					console.log($scope.eventIDs[id]);
+					$scope.events.push($firebase(ref));
+
+				}
+			}
+		},1000)
+	}
+
+
+}])
+.controller('PublicCtrl', ["$scope", "$rootScope", "$firebase", "$cookies", "$routeParams", function($scope, $rootScope, $firebase, $cookies, $routeParams) {
+
+	$scope.selectEvent = null;
+	$scope.selectID = null;
+	var category = $routeParams["list"];
+	$scope.search = $routeParams["search"];
+
+	getEvents();
+
+
+	$scope.showEvent = function(id){
+		$scope.selectEvent = $scope.events[id];
+		$scope.originalEvent = angular.extend({}, $scope.selectEvent);
+		$scope.selectID = id; 
+		$('.overlay.sidebar') .sidebar({
+			overlay: true})
+		.sidebar('toggle');
+	};
+
+	$scope.addComment = function(){
+		$scope.events.$child($scope.selectID).$child("comments").$add({ author: $rootScope.auth.user.name, pic:"https://graph.facebook.com/" + $cookies.id + "/picture", content: $scope.newComment});
+		$scope.selectEvent = $scope.events.$child($scope.selectID);
+		$scope.newComment = "";
+	};
+
+
+	$scope.cancelEvent = function(){
+		$scope.events[$scope.selectID] = $scope.originalEvent;
+		$scope.selectEvent = null;
+		$scope.originalEvent = null;
+		$scope.selectID = null; 
+
+		$('.overlay.sidebar') .sidebar({
+			overlay: true})
+		.sidebar('toggle');
+	};
+
+	$scope.joinEvent = function(){
+		var ref = new Firebase(url + "/Collaborating/users/" + $cookies.id);
+		$firebase(ref).$add($scope.selectID);
+		alert("Join Successfully")
+	};
+
+	function getEvents(){
+		var ref = new Firebase(url + "/Public/events/" + category);
+		$scope.events = $firebase(ref);
+	}
 
 }])
 .controller('searchCtrl', ["$scope","$location", function($scope, $location) {

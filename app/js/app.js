@@ -15,6 +15,14 @@ config(['$routeProvider', function($routeProvider) {
 		templateUrl: 'partials/private.html', 
 		controller: 'PrivateCtrl'
 	});
+	$routeProvider.when('/Collaborating/:list', {
+		templateUrl: 'partials/collaborating.html', 
+		controller: 'CollabCtrl'
+	});
+	$routeProvider.when('/Public/:list', {
+		templateUrl: 'partials/public.html', 
+		controller: 'PublicCtrl'
+	});
 //	$routeProvider.otherwise({
 //		redirectTo: '/Private'
 //	});

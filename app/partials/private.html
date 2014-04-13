@@ -35,7 +35,9 @@
 
 
 <div class="ui wide right overlay floating styled sidebar">
-  <h3 class="ui header">Event Details</h3>
+  <h3 class="ui header" style="display:inline">Event Details</h3>
+  <i class="arrow sign right large icon" style="float:right; cursor:pointer" ng-click="cancelEvent()"></i>
+  
   <div class="ui form">
 
     <div class="field">
@@ -64,10 +66,67 @@
     </div>
 
     <div class="3 fluid ui bottom buttons">
-      <div class="ui teal button" >Publish</div>
+      <div class="ui teal button" ng-click="publishEvent()">Publish</div>
       <div class="ui red button" ng-click="saveEvent()">Save</div>
       <div class="ui button" ng-click="cancelEvent()">Cancel</div>
     </div>
   </div>
+</div>
 
+<div class="ui basic modal">
+  <i class="close icon"></i>
+  <div class="header">
+    Confirm Information
+  </div>
+  <div class="ui form segment">
+
+    <div class="field">
+      <div class="ui left icon input">
+        <i class="checked checkbox icon"></i>
+        <input type="text" placeholder="Event" ng-model="selectEvent.concise">
+      </div>
+    </div>
+    <div class="ui two fields">
+      <div class="field">
+        <div class="ui left icon input">
+          <i class="calendar icon"></i>
+          <input type="text" placeholder="Date" id="datepicker2" ng-model="selectEvent.date">
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="ui left icon input">
+          <i class="location icon"></i>
+          <input type="text" placeholder="Location" ng-model="selectEvent.location">
+        </div>
+      </div>
+    </div>
+    
+    <div class="field">
+      <textarea class="eventDetails" ng-model="selectEvent.details"> </textarea>
+    </div>
+  </div>
+
+  <div class="ui selection dropdown">
+    <input type="hidden" name="gender">
+    <div class="default text" >{{pCategory}}</div>
+    <i class="dropdown icon"></i>
+    <div class="menu">
+      <div class="item" data-value="1">Hackthone</div>
+      <div class="item" data-value="0">Female</div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <div class="two fluid ui buttons">
+      <div class="ui positive labeled icon button">
+        Yes
+        <i class="checkmark icon"></i>
+      </div>
+      <div class="ui negative right labeled icon button">
+        <i class="remove icon"></i>
+        No
+      </div>
+    </div>
+  </div>
 </div>

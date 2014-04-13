@@ -11,6 +11,7 @@
   <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.js"></script>
   <script src="lib/semantic.js"></script>
 
+
 </head>
 <body>
   <div class="ui grid">
@@ -46,7 +47,7 @@
 
         <a class="item" ng-hide="PrvLflag" ng-click="addPrvL()">
           <i class="plus icon"></i>
-          Add a List
+          Add New List
         </a>
 
 
@@ -63,27 +64,24 @@
             <i class="users icon"></i>
             Collaborating
           </div>
-          <a class="item">
+          <a class="item" href="#/Collaborating/All">
             All
           </a>
 
           <a class="item">
             <i class="plus icon"></i>
-            Add a List
+            Add New List
           </a>
           <div class="header item">
             <i class="icon rss"></i>
             Public
           </div>
-          <a class="item">
+          <a class="item" href="#/Public/New">
             New
           </a>
           <a class="item">
-            Hot
-          </a>
-          <a class="item">
             <i class="plus icon"></i>
-            Add Categories
+            Add New Category
           </a>
         </div>
 
@@ -107,6 +105,7 @@
 
 
 <script src="lib/pikaday.js"></script>
+<script src="https://togetherjs.com/togetherjs-min.js"></script>
 
 <script src="lib/angular/angular.js"></script>
 <script src="lib/angular/angular-route.js"></script>
