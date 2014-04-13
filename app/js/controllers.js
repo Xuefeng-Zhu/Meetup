@@ -241,7 +241,6 @@ angular.module('myApp.controllers', ['firebase','ngCookies'])
 
 	getEvents();
 
-
 	$scope.showEvent = function(id){
 		$("#meetup").click(TowTruck);
 		$scope.selectEvent = $scope.events[id];
@@ -376,7 +375,6 @@ angular.module('myApp.controllers', ['firebase','ngCookies'])
 				if (id.indexOf('$') == -1)
 				{		
 					ref = new Firebase(url + "/Collaborating/events/" + $scope.eventIDs[id]);
-					console.log($scope.eventIDs[id]);
 					$scope.events.push($firebase(ref));
 
 				}
