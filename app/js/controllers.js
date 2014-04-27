@@ -172,24 +172,34 @@ angular.module('myApp.controllers', ['firebase','ngCookies'])
 		.modal('setting', {
 			closable  : true,
 			onDeny    : function(){
-
 			},
 			onApprove : function() {
+				var pCategory = $('#the-basics .typeahead')[1].value;
+
+				if (categories.indexOf(pCategory) == -1)
+				{
+					categories.push(pCategory);
+					new Firebase(url + "/Public/categories").push(pCategory);
+				}
+
 				if ($scope.pCategory == "Category")
 				{
 					alert("Please choose the Category to add");
 					return false;
 				}
 
-				var ref = new Firebase(url + "/Public/events/" + $scope.pCategory);
-				$firebase(ref).$child($scope.selectID).$set($scope.selectEvent);
+				if (pCategory != ""){
+					var ref = new Firebase(url + "/Public/events/" + pCategory);
+					$firebase(ref).$child($scope.selectID).$set($scope.selectEvent);
+				}
+
 				var ref = new Firebase(url + "/Public/events/New");
 				$firebase(ref).$child($scope.selectID).$set($scope.selectEvent);
 				var ref = new Firebase(url + "/Collaborating/events");
 				$firebase(ref).$child($scope.selectID).$set($scope.selectEvent);
 
 				var ref = new Firebase(url + "/Collaborating/users/" + $cookies.id);
-				$firebase(ref).$add($scope.selectID);
+				$firebase(ref).$child($scope.selectID).$set($scope.selectID);
 
 			}
 		})
