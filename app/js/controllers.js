@@ -4,7 +4,7 @@
 
 var url = "https://meetup2014.firebaseIO.com";
 angular.module('myApp.controllers', ['firebase','ngCookies'])
-.controller('userCtrl', ["$scope", "$rootScope", "$firebase", "$firebaseSimpleLogin", "$cookies", function($scope, $rootScope, $firebase,$firebaseSimpleLogin, $cookies) {
+.controller('userCtrl', ["$scope", "$rootScope", "$firebase", "$firebaseSimpleLogin", "$cookies", "$location", function($scope, $rootScope, $firebase,$firebaseSimpleLogin, $cookies, $location) {
 	
 	var ref = new Firebase(url + "/Users");
 	$scope.users = $firebase(ref);
@@ -14,6 +14,7 @@ angular.module('myApp.controllers', ['firebase','ngCookies'])
 
 	$scope.logout = function(){
 		$rootScope.auth.$logout();
+		$location.path("");
 	}
 
 	function upload(){
@@ -35,6 +36,14 @@ angular.module('myApp.controllers', ['firebase','ngCookies'])
 }])  
 .controller('listCtrl', ["$scope", "$rootScope", "$firebase", "$cookies", function($scope, $rootScope, $firebase, $cookies) {
 	
+	$rootScope.$watch('auth.user', function(){
+		if($rootScope.auth.user){
+			getCategories();
+		}
+		else{
+			$rootScope.prvCs = null;
+		}
+	}, true)
 
 	getCategories();
 
