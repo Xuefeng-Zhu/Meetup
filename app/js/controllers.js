@@ -86,22 +86,7 @@ angular.module('myApp.controllers', ['firebase','ngCookies'])
 		minDate: new Date(),
 		maxDate: new Date('2020-12-31'),
 		onSelect: function() {
-			if (!$scope.concise || $scope.concise == "")
-			{
-				alert("Please input event information");
-				return;
-			}
-
-			$scope.events.$add({concise: $scope.concise, date: this.toString(), complete: false, category: category});
-
-			if (category != "All"){
-				$rootScope.prvCs[category]["number"]++;
-				$rootScope.prvCs.$save(category);
-			}
-			$rootScope.prvCs["All"]["number"]++;
-			$rootScope.prvCs.$save("All");
-			$scope.concise = "";
-			this.gotoToday();
+			$scope.addEvent();
 		}
 	});
 
@@ -146,7 +131,7 @@ angular.module('myApp.controllers', ['firebase','ngCookies'])
 			alert("Please input event information");
 			return;
 		}
-		$scope.events.$add({concise: concise, date: $scope.picker.toString(), complete: false});
+		$scope.events.$add({concise: concise, date: $scope.picker.toString(), complete: false, category: category});
 		if (category != "All"){
 			$rootScope.prvCs[category]["number"]++;
 			$rootScope.prvCs.$save(category);
