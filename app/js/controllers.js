@@ -476,7 +476,7 @@ function getEvents(){
 
 	$scope.joinEvent = function(){
 		var ref = new Firebase(url + "/Collaborating/users/" + $cookies.id);
-		$firebase(ref).$add($scope.selectID);
+		$firebase(ref).$child($scope.selectID).$set($scope.selectID);
 		alert("Join Successfully")
 	};
 
