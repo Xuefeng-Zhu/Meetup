@@ -1,0 +1,86 @@
+<div class="ui three items">
+  <div class="item" style="min-height:100px" ng-repeat="(eid, event) in events | eventFilter:false">
+    <div class="content" ng-click="showEvent(eid)">
+      <div class="meta">{{event.location}}</div>
+      <div class="name">{{event.concise}}</div>
+      <p class="description">{{event.details}}</p>
+    </div>
+    <div class="extra">
+      {{event.date}}
+    </div>
+  </div>
+</div>
+
+
+<div class="ui very wide right overlay floating styled sidebar">
+  <h3 class="ui header" style="display:inline">Event Details</h3>
+  <i class="arrow sign right large icon" style="float:right; cursor:pointer" ng-click="cancelEvent()"></i>
+
+  
+  <div class="ui form">
+
+    <div class="field">
+      <div class="ui left icon input">
+        <i class="checked checkbox icon"></i>
+        <input type="text" placeholder="Event" ng-model="selectEvent.concise" disabled style="opacity:1">
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="ui left icon input">
+        <i class="calendar icon"></i>
+        <input type="text" placeholder="Date" id="datepicker2" ng-model="selectEvent.date" disabled style="opacity:1">
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="ui left icon input">
+        <i class="location icon"></i>
+        <input type="text" placeholder="Location" ng-model="selectEvent.location" disabled style="opacity:1">
+      </div>
+    </div>
+
+    <div class="field">
+      <textarea class="eventDetails" ng-model="selectEvent.details" disabled style="opacity:1"> </textarea>
+    </div>
+    <div class="ui piled blue segment">
+      <h2 class="ui header">
+        <i class="icon inverted circular blue comment"></i> Comments
+      </h2>
+      <div class="ui comments">
+        <div class="comment" ng-repeat="comment in selectEvent.comments">
+          <a class="avatar">
+            <img src="{{comment.pic}}">
+          </a>
+          <div class="content">
+            <a class="author">{{comment.author}}</a>
+            <div class="text">
+              {{comment.content}}
+            </div>
+          </div>
+        </div>
+        <form class="ui reply form">
+          <div class="field">
+            <input type="text" placeholder="New Comment" ng-model="newComment">
+          </div>
+          <div class="ui fluid blue labeled submit icon button" ng-click="addComment()">
+            <i class="icon edit"></i> Add Comment
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="2 fluid ui bottom buttons">
+      <div class="ui teal button" ng-click="meetup()" id="meetup">Meetup</div>
+      <div class="ui button" ng-click="cancelEvent()">Back</div>
+    </div>
+  </div>
+</div>
+
+<div class="ui modal" id="draw-modal">
+  <i class="close icon"></i>
+  <div class="header">
+    CoEditting 
+  </div>
+  <canvas id="drawing-canvas" width="1000" height="500"></canvas>
+</div>
