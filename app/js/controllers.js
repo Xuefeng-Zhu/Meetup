@@ -105,17 +105,18 @@ angular.module('myApp.controllers', ['firebase','ngCookies'])
 			$scope.events.$save(id);
 			if (event.complete)
 			{
-				if (category != "All"){
-					$rootScope.prvCs[category]["number"]--;
-					$rootScope.prvCs.$save(category);
+				if (event.category != "All"){
+					$rootScope.prvCs[event.category]["number"]--;
+					$rootScope.prvCs.$save(event.category);
 				}
+
 				$rootScope.prvCs["All"]["number"]--;
 				$rootScope.prvCs.$save("All");
 			}
 			else{
-				if (category != "All"){
-					$rootScope.prvCs[category]["number"]++;
-					$rootScope.prvCs.$save(category);
+				if (event.category != "All"){
+					$rootScope.prvCs[event.category]["number"]++;
+					$rootScope.prvCs.$save(event.category);
 				}
 				$rootScope.prvCs["All"]["number"]++;
 				$rootScope.prvCs.$save("All");
