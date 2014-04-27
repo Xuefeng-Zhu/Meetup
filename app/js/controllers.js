@@ -173,8 +173,7 @@ angular.module('myApp.controllers', ['firebase','ngCookies'])
 	};
 
 	$scope.publishEvent = function(){
-		$scope.pCategory = "Category";
-		$('.basic.modal')
+		$('#confirm-modal')
 		.modal('setting', {
 			closable  : true,
 			onDeny    : function(){
@@ -201,13 +200,6 @@ angular.module('myApp.controllers', ['firebase','ngCookies'])
 		})
 		.modal('show')
 		;
-
-		$('.ui.dropdown')
-		.dropdown('setting',{
-			onChange :function(value, text){
-				$scope.pCategory = text;
-			}
-		});
 	}
 
 	$scope.saveEvent = function(){
@@ -255,37 +247,37 @@ angular.module('myApp.controllers', ['firebase','ngCookies'])
         // the typeahead jQuery plugin expects suggestions to a
         // JavaScript object, refer to typeahead docs for more info
         matches.push({ value: str });
-	    }
+    }
+});
+
+    cb(matches);
+};
+};
+
+var categories = [];
+getCategories();
+
+function getCategories(){
+	var ref = new Firebase(url + "/Public/categories");
+	ref.on('value', function(snapshot){
+		if(snapshot.val() !== null){
+			snapshot.forEach(function(childSnapshot){
+				categories.push(childSnapshot.val());
+			});
+		}
 	});
+}
 
-	    cb(matches);
-	};
-	};
-
-	var categories = [];
-	getCategories();
-
-	function getCategories(){
-		var ref = new Firebase(url + "/Public/categories");
-		ref.on('value', function(snapshot){
-			if(snapshot.val() !== null){
-				snapshot.forEach(function(childSnapshot){
-					categories.push(childSnapshot.val());
-				});
-			}
-		});
-	}
-
-	$('#the-basics .typeahead').typeahead({
-		hint: true,
-		highlight: true,
-		minLength: 1
-	},
-	{
-		name: 'categories',
-		displayKey: 'value',
-		source: substringMatcher(categories)
-	});
+$('#the-basics .typeahead').typeahead({
+	hint: true,
+	highlight: true,
+	minLength: 1
+},
+{
+	name: 'categories',
+	displayKey: 'value',
+	source: substringMatcher(categories)
+});
 
 }])
 .controller('CollabCtrl', ["$scope", "$rootScope", "$firebase", "$cookies", "$routeParams", function($scope, $rootScope, $firebase, $cookies, $routeParams) {
