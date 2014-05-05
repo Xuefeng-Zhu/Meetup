@@ -51,8 +51,9 @@ angular.module('myApp.controllers', ['firebase','ngCookies'])
 	$scope.PrvLflag = false;
 
 	
-	$scope.selectList = function(lid){
+	$scope.selectList = function(lid, pcp){
 		$scope.selectLid = lid;
+		$scope.pcp = pcp;
 	};
 
 	$scope.addPrvL = function(){
@@ -72,10 +73,28 @@ angular.module('myApp.controllers', ['firebase','ngCookies'])
 		$scope.cancelPrvL();
 	};
 
+	$scope.addColL = function(){
+		$scope.ColLflag = true;
+	};
+
+	$scope.cancelColL = function(){
+		$scope.ColLflag = false;
+		$scope.newList = "";
+	};
+
+	$scope.saveColl = function(e){
+		if (e.keyCode != 13 || $scope.newList == ""){
+			return;
+		}
+		$rootScope.colCs.$child($scope.newList).$set({name: $scope.newList, number: 0});
+		$scope.cancelColL();
+	};
 
 	function getCategories(){
 		var ref = new Firebase(url + "/Private/" + $cookies.id + "/categories");
 		$rootScope.prvCs = $firebase(ref);
+		var ref = new Firebase(url + "/Collaborating/" + $cookies.id + "/categories");
+		$rootScope.colCs = $firebase(ref);
 	}
 }])  
 .controller('PrivateCtrl', ["$scope", "$rootScope", "$firebase", "$cookies", "$routeParams", function($scope, $rootScope, $firebase, $cookies, $routeParams) {

@@ -37,14 +37,13 @@
         </div>
 
         <div ng-repeat="(lid, category) in prvCs">
-          <a class="item" ng-class="{active: lid==selectLid}" ng-href="#/Private/{{category.name}}" ng-click="selectList(lid)">
+          <a class="item" ng-class="{active: lid==selectLid && pcp=='Private'}" ng-href="#/Private/{{category.name}}" ng-click="selectList(lid, 'Private')">
             {{category.name}}
             <div class="ui red label">{{category.number}}</div>
           </a>
         </div>
 
         
-
         <a class="item" ng-hide="PrvLflag" ng-click="addPrvL()">
           <i class="plus icon"></i>
           Add New List
@@ -60,43 +59,57 @@
 
 
 
-          <div class="header item">
-            <i class="users icon"></i>
-            Collaborating
-          </div>
-          <a class="item" href="#/Collaborating/All">
-            All
-          </a>
+        <div class="header item">
+          <i class="users icon"></i>
+          Collaborating
+        </div>
+        <a class="item" ng-class="{active: selectLid=='All' && pcp=='Collaborating'}" href="#/Collaborating/All" ng-click="selectList('All', 'Collaborating')">
+          All
+        </a>
 
-          <a class="item">
-            <i class="plus icon"></i>
-            Add New List
-          </a>
-          <div class="header item">
-            <i class="icon rss"></i>
-            Public
-          </div>
-          <a class="item" href="#/Public/New">
-            New
-          </a>
-          <a class="item">
-            <i class="plus icon"></i>
-            Add New Category
+        <div ng-repeat="(lid, category) in colCs">
+          <a class="item" ng-class="{active: lid==selectLid && pcp=='Collaborating'}" ng-href="#/Collaborating/{{category.name}}" ng-click="selectList(lid, 'Collaborating')">
+            {{category.name}}
           </a>
         </div>
 
-        <div class="ui attached segment" ng-controller="searchCtrl">
-          <div class="ui fluid icon input">
-            <input type="text" placeholder="Search Events..." ng-model="searchEvent">
-            <i class="blue inverted search icon" id="searchButton" ng-click="search()"></i>
+        <a class="item" ng-hide="ColLflag" ng-click="addColL()">
+          <i class="plus icon"></i>
+          Add New List
+        </a>
+
+        <div class="fuild item" ng-show="ColLflag">
+          <div class="ui action small  input">
+            <input type="text" placeholder="New Listname" ng-model="newList" ng-keydown="saveColl($event)">
+            <div class="ui button" ng-click="cancelColL()">Cancel</div>
           </div>
         </div>
+
+        <div class="header item">
+          <i class="icon rss"></i>
+          Public
+        </div>
+        <a class="item" href="#/Public/New">
+          New
+        </a>
+        <a class="item">
+          <i class="plus icon"></i>
+          Add New Category
+        </a>
       </div>
 
-      <div class="twelve wide column" id="lists" style="overflow-y: scroll">
-        <div ng-view></div>
+      <div class="ui attached segment" ng-controller="searchCtrl">
+        <div class="ui fluid icon input">
+          <input type="text" placeholder="Search Events..." ng-model="searchEvent">
+          <i class="blue inverted search icon" id="searchButton" ng-click="search()"></i>
+        </div>
       </div>
     </div>
+
+    <div class="twelve wide column" id="lists" style="overflow: scroll">
+      <div ng-view></div>
+    </div>
+  </div>
 
 
   <!-- In production use:
@@ -132,8 +145,8 @@
 <script src="js/directives.js"></script>
 
 <script type="text/javascript">
-  $("#events").height($(window).height() - 69 - 68);
-  $("#lists").height($(window).height());
+$("#events").height($(window).height() - 69 - 68);
+$("#lists").height($(window).height());
 
 </script>
 
