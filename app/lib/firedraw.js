@@ -11,6 +11,7 @@ function startdraw(id) {
 
     // Set up our canvas
     var myCanvas = document.getElementById('drawing-canvas');
+    myCanvas.width = myCanvas.width;
     var myContext = myCanvas.getContext ? myCanvas.getContext('2d') : null;
     if (myContext == null) {
     	alert("You must use a browser that supports HTML5 Canvas to run this demo.");
@@ -27,7 +28,9 @@ function startdraw(id) {
     			currentColor = col;
     		};
     	})());
-    	item.appendTo('#colorholder');
+        if ($('#colorholder').children().length < colors.length){
+            item.appendTo('#colorholder');
+        }
     }
 
     //Keep track of if the mouse is up or down
