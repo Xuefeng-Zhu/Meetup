@@ -1,5 +1,5 @@
 <div class="ui three items">
-  <div class="item" style="min-height:100px" ng-repeat="(eid, event) in events |publicFilter">
+  <div class="item fx-rotate-clock fx-easing-quad fx-speed-500" style="min-height:100px"  ng-repeat="(eid, event) in events |publicFilter">
     <div class="content" ng-click="showEvent(eid)">
       <div class="meta">{{event.location}}</div>
       <div class="name">{{event.concise}}</div>

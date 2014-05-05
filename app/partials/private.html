@@ -10,7 +10,7 @@
 </div>
 
 
-<div class="ui segment event" ng-repeat="(eid,event) in events | eventFilter:false " ng-click="showEvent(eid)">
+<div class="ui segment event fx-fade-left fx-easing-quad fx-speed-500" ng-repeat="(eid,event) in events | eventFilter:false " ng-click="showEvent(eid)">
   <div class="ui toggle checkbox">
     <input type="checkbox" name="event" id="{{eid}}" ng-click="toggleCompleted(eid)">
     <label for="{{eid}}"></label>
@@ -24,7 +24,7 @@
 </div>
 
 
-<div class="ui segment" ng-repeat="(eid,event) in events | eventFilter:true">
+<div class="ui segment fx-fade-left fx-easing-quad fx-speed-500" ng-repeat="(eid,event) in events | eventFilter:true">
   <div class="ui toggle checkbox">
     <input type="checkbox" ng-checked="true" name="event" id="{{eid}}" ng-click="toggleCompleted(eid)">
     <label for="{{eid}}"></label>
