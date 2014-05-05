@@ -1,12 +1,13 @@
 //firedraw from firebase
 //revised by Xuefeng Zhu 
 
-function startdraw() {
+function startdraw(id) {
+    console.log(id);
     //Set up some globals
     var pixSize = 1, lastPoint = null, currentColor = "000", mouseDown = 0;
 
     //Create a reference to the pixel data for our drawing.
-    var pixelDataRef = new Firebase(url + "/temp");
+    var pixelDataRef = new Firebase(url + "/draw/" + id);
 
     // Set up our canvas
     var myCanvas = document.getElementById('drawing-canvas');

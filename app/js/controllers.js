@@ -344,7 +344,8 @@ $('#the-basics .typeahead').typeahead({
 	$scope.meetup = function(){
 
 		$scope.pCategory = "Category";
-		startdraw();
+		console.log(Object.keys($scope.eventIDs));
+		startdraw($scope.eventIDs[Object.keys($scope.eventIDs)[$scope.selectID]]);
 
 		$('#draw-modal')
 		.modal('setting', {
@@ -365,6 +366,10 @@ $('#the-basics .typeahead').typeahead({
 					ref = new Firebase(url + "/Collaborating/events/" + $scope.eventIDs[id]);
 					$scope.events.push($firebase(ref));
 
+				}
+				else 
+				{
+					delete $scope.eventIDs[id];
 				}
 			}
 		},1000)
