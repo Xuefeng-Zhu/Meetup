@@ -355,6 +355,11 @@ $('#the-basics .typeahead').typeahead({
 
 	}
 
+	$scope.cleardraw = function(){
+		var pixelDataRef = new Firebase(url + "/draw/" + $scope.eventIDs[Object.keys($scope.eventIDs)[$scope.selectID]]);
+		pixelDataRef.remove();
+	}
+
 	function getEvents(){
 		var ref = new Firebase(url + "/Collaborating/users");
 		$scope.eventIDs = $firebase(ref).$child($cookies.id);
