@@ -10,7 +10,7 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.js"></script>
   <script src="lib/semantic.js"></script>
-
+  
 
 </head>
 <body>
@@ -93,7 +93,7 @@
         </div>
       </div>
 
-      <div class="twelve wide column">
+      <div class="twelve wide column" id="lists" style="overflow-y: scroll">
         <div ng-view></div>
       </div>
     </div>
@@ -131,6 +131,11 @@
 <script src="js/filters.js"></script>
 <script src="js/directives.js"></script>
 
+<script type="text/javascript">
+  $("#events").height($(window).height() - 69 - 68);
+  $("#lists").height($(window).height());
+
+</script>
 
 </body>
 </html>
