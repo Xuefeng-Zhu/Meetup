@@ -90,12 +90,47 @@ angular.module('myApp.controllers', ['firebase','ngCookies'])
 		$scope.cancelColL();
 	};
 
+	$scope.addPubL = function(){
+		$scope.PubLflag = true;
+		while(categories.pop());
+		getList();
+	};
+
+	$scope.cancelPubL = function(){
+		$scope.PubLflag = false;
+		$scope.newList = "";
+	};
+
+	$scope.saveColl = function(e){
+		if (e.keyCode != 13 || $scope.newList == ""){
+			return;
+		}
+		$rootScope.colCs.$child($scope.newList).$set({name: $scope.newList, number: 0});
+		$scope.cancelColL();
+	};
+
 	function getCategories(){
 		var ref = new Firebase(url + "/Private/" + $cookies.id + "/categories");
 		$rootScope.prvCs = $firebase(ref);
 		var ref = new Firebase(url + "/Collaborating/" + $cookies.id + "/categories");
 		$rootScope.colCs = $firebase(ref);
+		var ref = new Firebase(url + "/Public/" + $cookies.id + "/categories");
+		$rootScope.pubCs = $firebase(ref);
+
 	}
+
+
+	$('#public .typeahead').typeahead({
+		hint: true,
+		highlight: true,
+		minLength: 1
+	},
+	{
+		name: 'categories',
+		displayKey: 'value',
+		source: substringMatcher(categories)
+	});
+
 }])  
 .controller('PrivateCtrl', ["$scope", "$rootScope", "$firebase", "$cookies", "$routeParams", function($scope, $rootScope, $firebase, $cookies, $routeParams) {
 
@@ -187,6 +222,8 @@ angular.module('myApp.controllers', ['firebase','ngCookies'])
 	};
 
 	$scope.publishEvent = function(){
+		while(categories.pop());
+		getList();
 		$('#confirm-modal')
 		.modal('setting', {
 			closable  : true,
@@ -222,75 +259,38 @@ angular.module('myApp.controllers', ['firebase','ngCookies'])
 
 			}
 		})
-		.modal('show')
-		;
-	}
+.modal('show')
+;
+}
 
-	$scope.saveEvent = function(){
-		$scope.events.$save($scope.selectID);
-		$scope.selectEvent = null;
-		$scope.originalEvent = null;
-		$scope.selectID = null; 
+$scope.saveEvent = function(){
+	$scope.events.$save($scope.selectID);
+	$scope.selectEvent = null;
+	$scope.originalEvent = null;
+	$scope.selectID = null; 
 
-		$('.overlay.sidebar') .sidebar({
-			overlay: true})
-		.sidebar('toggle');
-	}
+	$('.overlay.sidebar') .sidebar({
+		overlay: true})
+	.sidebar('toggle');
+}
 
-	$scope.cancelEvent = function(){
-		$scope.events[$scope.selectID] = $scope.originalEvent;
-		$scope.selectEvent = null;
-		$scope.originalEvent = null;
-		$scope.selectID = null; 
+$scope.cancelEvent = function(){
+	$scope.events[$scope.selectID] = $scope.originalEvent;
+	$scope.selectEvent = null;
+	$scope.originalEvent = null;
+	$scope.selectID = null; 
 
-		$('.overlay.sidebar') .sidebar({
-			overlay: true})
-		.sidebar('toggle');
-	}
+	$('.overlay.sidebar') .sidebar({
+		overlay: true})
+	.sidebar('toggle');
+}
 
-	function getEvents(){
-		var ref = new Firebase(url + "/Private/" + $cookies.id + "/events");
-		$scope.events = $firebase(ref);
-	}
+function getEvents(){
+	var ref = new Firebase(url + "/Private/" + $cookies.id + "/events");
+	$scope.events = $firebase(ref);
+}
 
 	//typeahdead
-	var substringMatcher = function(strs) {
-		return function findMatches(q, cb) {
-			var matches, substrRegex;
-
-    // an array that will be populated with substring matches
-    matches = [];
-
-    // regex used to determine if a string contains the substring `q`
-    substrRegex = new RegExp(q, 'i');
-
-    // iterate through the pool of strings and for any string that
-    // contains the substring `q`, add it to the `matches` array
-    $.each(strs, function(i, str) {
-    	if (substrRegex.test(str)) {
-        // the typeahead jQuery plugin expects suggestions to a
-        // JavaScript object, refer to typeahead docs for more info
-        matches.push({ value: str });
-    }
-});
-
-    cb(matches);
-};
-};
-
-var categories = [];
-getCategories();
-
-function getCategories(){
-	var ref = new Firebase(url + "/Public/categories");
-	ref.on('value', function(snapshot){
-		if(snapshot.val() !== null){
-			snapshot.forEach(function(childSnapshot){
-				categories.push(childSnapshot.val());
-			});
-		}
-	});
-}
 
 $('#the-basics .typeahead').typeahead({
 	hint: true,
@@ -354,21 +354,21 @@ $('#the-basics .typeahead').typeahead({
 
 	}
 
-function getEvents(){
-	var ref = new Firebase(url + "/Collaborating/users");
-	$scope.eventIDs = $firebase(ref).$child($cookies.id);
-	$scope.events = [];
-	setTimeout(function(){
-		for(var id in $scope.eventIDs){
-			if (id.indexOf('$') == -1)
-			{		
-				ref = new Firebase(url + "/Collaborating/events/" + $scope.eventIDs[id]);
-				$scope.events.push($firebase(ref));
+	function getEvents(){
+		var ref = new Firebase(url + "/Collaborating/users");
+		$scope.eventIDs = $firebase(ref).$child($cookies.id);
+		$scope.events = [];
+		setTimeout(function(){
+			for(var id in $scope.eventIDs){
+				if (id.indexOf('$') == -1)
+				{		
+					ref = new Firebase(url + "/Collaborating/events/" + $scope.eventIDs[id]);
+					$scope.events.push($firebase(ref));
 
+				}
 			}
-		}
-	},1000)
-}
+		},1000)
+	}
 
 
 }])

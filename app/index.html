@@ -89,13 +89,31 @@
           <i class="icon rss"></i>
           Public
         </div>
-        <a class="item" href="#/Public/New">
+
+        <a class="item" ng-class="{active: selectLid='New' && pcp=='Public'}" href="#/Public/New" ng-click="selectList('New', 'Public')">
           New
         </a>
-        <a class="item">
+
+        <div ng-repeat="(lid, category) in pubCs">
+          <a class="item" ng-class="{active: lid==selectLid && pcp=='Public'}" ng-href="#/Public/{{category.name}}" ng-click="selectList(lid, 'Public')">
+            {{category.name}}
+          </a>
+        </div>
+
+        <a class="item" ng-hide="PubLflag" ng-click="addPubL()">
           <i class="plus icon"></i>
           Add New Category
         </a>
+
+        <div class="fuild item" ng-show="PubLflag">
+          <div class="ui action small input">
+            <div id="public">
+              <input class="typeahead" type="text" placeholder="Event Category">
+            </div>
+            <div class="ui button" ng-click="cancelPubL()">Cancel</div>
+          </div>
+        </div>
+
       </div>
 
       <div class="ui attached segment" ng-controller="searchCtrl">
@@ -121,6 +139,8 @@
 <script src="https://togetherjs.com/togetherjs-min.js"></script>
 <script src="http://twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.min.js"></script>
 <script src="lib/firedraw.js"></script>
+<script src="lib/help.js"></script>
+
 
 
 <script src="lib/angular/angular.js"></script>
@@ -148,7 +168,7 @@
 
 <script type="text/javascript">
 $("#events").height($(window).height() - 69 - 68);
-$("#lists").height($(window).height());
+$("#lists").height($(window).height() -30);
 
 </script>
 

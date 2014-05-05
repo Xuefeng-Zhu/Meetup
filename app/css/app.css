@@ -82,7 +82,7 @@ i.icon.remove:hover{
 .typeahead,
 .tt-query,
 .tt-hint {
-  width: 396px;
+  width: 300px;
   padding: 0.65em 1em;
   font-size: 1em;
   border: 2px solid #ccc;
@@ -111,7 +111,7 @@ i.icon.remove:hover{
 }
 
 .tt-dropdown-menu {
-  width: 422px;
+  width: 300px;
   margin-top: 12px;
   padding: 8px 0;
   background-color: #fff;
