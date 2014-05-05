@@ -344,12 +344,14 @@ $('#the-basics .typeahead').typeahead({
 	$scope.meetup = function(){
 
 		$scope.pCategory = "Category";
-		console.log(Object.keys($scope.eventIDs));
 		startdraw($scope.eventIDs[Object.keys($scope.eventIDs)[$scope.selectID]]);
 
 		$('#draw-modal')
 		.modal('setting', {
 			closable  : true,
+			onHide: function(){
+				TowTruck(this);
+			}
 		})
 		.modal('show');
 
