@@ -108,7 +108,7 @@
         <div class="fuild item" ng-show="PubLflag">
           <div class="ui action small input">
             <div id="public">
-              <input class="typeahead" type="text" placeholder="Event Category">
+              <input class="typeahead" type="text" placeholder="Event Category" ng-keydown="savePubl($event)">
             </div>
             <div class="ui button" ng-click="cancelPubL()">Cancel</div>
           </div>

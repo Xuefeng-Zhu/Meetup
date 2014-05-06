@@ -101,12 +101,14 @@ angular.module('myApp.controllers', ['firebase','ngCookies'])
 		$scope.newList = "";
 	};
 
-	$scope.saveColl = function(e){
+	$scope.savePubl = function(e){
 		if (e.keyCode != 13 || $scope.newList == ""){
 			return;
 		}
-		$rootScope.colCs.$child($scope.newList).$set({name: $scope.newList, number: 0});
-		$scope.cancelColL();
+		var pCategory = $('#public .typeahead')[1].value;
+
+		$rootScope.pubCs.$child(pCategory).$set({name: pCategory, number: 0});
+		$scope.cancelPubL();
 	};
 
 	function getCategories(){
