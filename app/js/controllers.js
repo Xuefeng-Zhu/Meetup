@@ -324,8 +324,11 @@ $('#the-basics .typeahead').typeahead({
 	};
 
 	$scope.addComment = function(){
-		$scope.events.$child($scope.selectID).$child("comments").$add({ author: $rootScope.auth.user.name, pic:"https://graph.facebook.com/" + $cookies.id + "/picture", content: $scope.newComment});
-		$scope.selectEvent = $scope.events.$child($scope.selectID);
+		var commentRef = new Firebase(url + "/Collaborating/events/" + $scope.eventIDs[Object.keys($scope.eventIDs)[$scope.selectID]] + "/comments");
+		commentRef.push({ author: $rootScope.auth.user.name, pic:"https://graph.facebook.com/" + $cookies.id + "/picture", content: $scope.newComment});
+		
+		$scope.selectEvent = commentRef.parent().val();
+		$scope.events[$scope.selectID] = $scope.selectEvent;
 		$scope.newComment = "";
 	};
 
