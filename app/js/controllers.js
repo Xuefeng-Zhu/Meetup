@@ -431,7 +431,7 @@ $('#the-basics .typeahead').typeahead({
 	$scope.joinEvent = function(){
 		var ref = new Firebase(url + "/Collaborating/users/" + $cookies.id);
 		$firebase(ref).$child($scope.selectID).$set($scope.selectID);
-		alert("Join Successfully")
+		alertify.alert("Join Successfully");
 	};
 
 	function getEvents(){
