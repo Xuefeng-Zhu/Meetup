@@ -68,7 +68,14 @@
     </div>
 
     <div class="2 fluid ui bottom buttons">
-      <div class="ui teal button" ng-click="meetup()" id="meetup">Meetup</div>
+      <div class="ui teal labeled icon top right pointing dropdown button">
+        <i class="chat icon"></i>
+        <span class="text">Meetup</span>
+        <div class="menu">
+          <div class="item" ng-click="meetup()" id="meetup"><i class="pencil icon"></i>CoDrawing</div>
+        </div>
+      </div>
+      
       <div class="ui button" ng-click="cancelEvent()">Back</div>
     </div>
   </div>

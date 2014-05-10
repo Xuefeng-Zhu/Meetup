@@ -294,16 +294,16 @@ function getEvents(){
 
 	//typeahdead
 
-$('#the-basics .typeahead').typeahead({
-	hint: true,
-	highlight: true,
-	minLength: 1
-},
-{
-	name: 'categories',
-	displayKey: 'value',
-	source: substringMatcher(categories)
-});
+	$('#the-basics .typeahead').typeahead({
+		hint: true,
+		highlight: true,
+		minLength: 1
+	},
+	{
+		name: 'categories',
+		displayKey: 'value',
+		source: substringMatcher(categories)
+	});
 
 }])
 .controller('CollabCtrl', ["$scope", "$rootScope", "$firebase", "$cookies", "$routeParams", function($scope, $rootScope, $firebase, $cookies, $routeParams) {
@@ -314,7 +314,9 @@ $('#the-basics .typeahead').typeahead({
 	$scope.search = $routeParams["search"];
 
 	getEvents();
-
+	$('.ui.dropdown')
+	.dropdown();
+	
 	$scope.showEvent = function(id){
 		$("#meetup").click(TowTruck);
 		$scope.selectEvent = $scope.events[id];
@@ -333,7 +335,7 @@ $('#the-basics .typeahead').typeahead({
 			$scope.selectEvent = dataSnapshot.val();
 			$scope.events[$scope.selectID] = dataSnapshot.val();
 		})
-		$scope.newComment = "";
+		delete $scope.newComment;
 	};
 
 
@@ -346,6 +348,7 @@ $('#the-basics .typeahead').typeahead({
 		$('.overlay.sidebar') .sidebar({
 			overlay: true})
 		.sidebar('toggle');
+		delete $scope.newComment;
 	}
 
 	$scope.meetup = function(){
@@ -413,7 +416,7 @@ $('#the-basics .typeahead').typeahead({
 	$scope.addComment = function(){
 		$scope.events.$child($scope.selectID).$child("comments").$add({ author: $rootScope.auth.user.name, pic:"https://graph.facebook.com/" + $cookies.id + "/picture", content: $scope.newComment});
 		$scope.selectEvent = $scope.events.$child($scope.selectID);
-		$scope.newComment = "";
+		delete $scope.newComment;
 	};
 
 
@@ -426,6 +429,7 @@ $('#the-basics .typeahead').typeahead({
 		$('.overlay.sidebar') .sidebar({
 			overlay: true})
 		.sidebar('toggle');
+		delete $scope.newComment;
 	};
 
 	$scope.joinEvent = function(){
