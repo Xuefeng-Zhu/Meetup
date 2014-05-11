@@ -328,14 +328,18 @@ function getEvents(){
 	};
 
 	$scope.addComment = function(){
+		if(!$("#newComment").val()){
+			return;
+		}
 		var commentRef = new Firebase(url + "/Collaborating/events/" + $scope.eventIDs[Object.keys($scope.eventIDs)[$scope.selectID]] + "/comments");
-		commentRef.push({ author: $rootScope.auth.user.name, pic:"https://graph.facebook.com/" + $cookies.id + "/picture", content: $scope.newComment});
+		commentRef.push({ author: $rootScope.auth.user.name, pic:"https://graph.facebook.com/" + $cookies.id + "/picture", content: $("#newComment").val()});
 		
 		commentRef.parent().once('value', function(dataSnapshot){
 			$scope.selectEvent = dataSnapshot.val();
 			$scope.events[$scope.selectID] = dataSnapshot.val();
 		})
-		delete $scope.newComment;
+		$("#newComment").val("");
+
 	};
 
 
@@ -348,7 +352,6 @@ function getEvents(){
 		$('.overlay.sidebar') .sidebar({
 			overlay: true})
 		.sidebar('toggle');
-		delete $scope.newComment;
 	}
 
 	$scope.codraw = function(){
@@ -416,9 +419,12 @@ function getEvents(){
 	};
 
 	$scope.addComment = function(){
-		$scope.events.$child($scope.selectID).$child("comments").$add({ author: $rootScope.auth.user.name, pic:"https://graph.facebook.com/" + $cookies.id + "/picture", content: $scope.newComment});
+		if (!$("#newComment").val()){
+			return;
+		}
+		$scope.events.$child($scope.selectID).$child("comments").$add({ author: $rootScope.auth.user.name, pic:"https://graph.facebook.com/" + $cookies.id + "/picture", content: $("#newComment").val()});
 		$scope.selectEvent = $scope.events.$child($scope.selectID);
-		delete $scope.newComment;
+		$("#newComment").val("");
 	};
 
 
@@ -431,7 +437,6 @@ function getEvents(){
 		$('.overlay.sidebar') .sidebar({
 			overlay: true})
 		.sidebar('toggle');
-		delete $scope.newComment;
 	};
 
 	$scope.joinEvent = function(){

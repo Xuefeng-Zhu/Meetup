@@ -61,7 +61,7 @@
         </div>
         <form class="ui reply form" ng-submit="addComment()">
           <div class="field">
-            <input type="text" placeholder="New Comment" ng-model="newComment">
+            <input type="text" placeholder="New Comment" id="newComment">
           </div>
         </form>
       </div>
@@ -85,10 +85,16 @@
 <div class="ui modal" id="draw-modal">
   <i class="close icon"></i>
   <div class="header">
-    CoDrawing
+    CoDraw
     <a class="ui button" style="float:right" ng-click="cleardraw()">Clear</a>
   </div>
-  <div></div>
   <canvas id="drawing-canvas" width="1000" height="450"></canvas>
   <div id="colorholder"></div>
+</div>
+
+<div class="ui modal" id="edit-modal">
+  <i class="close icon"></i>
+  <div class="header">
+    CoEdit
+  </div>
 </div>
