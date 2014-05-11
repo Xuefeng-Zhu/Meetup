@@ -405,7 +405,7 @@ $scope.coedit = function(){
 	session.setUseWorker(false);
 	session.setMode("ace/mode/javascript");
 
-	var firepad = Firepad.fromACE(firepadRef, editor,  { richTextToolbar: true, richTextShortcuts: true });
+	var firepad = Firepad.fromACE(firepadRef, editor);
 
 	firepad.on('ready', function() {
 		if (firepad.isHistoryEmpty()) {
