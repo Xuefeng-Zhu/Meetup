@@ -215,7 +215,7 @@ angular.module('myApp.controllers', ['firebase','ngCookies'])
 
 	$scope.showEvent = function(id){
 		$scope.selectEvent = $scope.events[id];
-		$scope.originalEvent = angular.extend({}, $scope.selectEvent);
+	//	$scope.originalEvent = angular.extend({}, $scope.selectEvent);
 		$scope.selectID = id; 
 		$scope.picker2.setDate($scope.selectEvent.date);
 		$('.overlay.sidebar') .sidebar({
@@ -268,7 +268,7 @@ angular.module('myApp.controllers', ['firebase','ngCookies'])
 $scope.saveEvent = function(){
 	$scope.events.$save($scope.selectID);
 	$scope.selectEvent = null;
-	$scope.originalEvent = null;
+//	$scope.originalEvent = null;
 	$scope.selectID = null; 
 
 	$('.overlay.sidebar') .sidebar({
@@ -277,9 +277,9 @@ $scope.saveEvent = function(){
 }
 
 $scope.cancelEvent = function(){
-	$scope.events[$scope.selectID] = $scope.originalEvent;
+//	$scope.events[$scope.selectID] = $scope.originalEvent;
 	$scope.selectEvent = null;
-	$scope.originalEvent = null;
+//	$scope.originalEvent = null;
 	$scope.selectID = null; 
 
 	$('.overlay.sidebar') .sidebar({
@@ -318,9 +318,9 @@ function getEvents(){
 	.dropdown();
 	
 	$scope.showEvent = function(id){
-		$("#meetup").click(TowTruck);
+		$("codraw").click(TowTruck);
 		$scope.selectEvent = $scope.events[id];
-		$scope.originalEvent = angular.extend({}, $scope.selectEvent);
+	//	$scope.originalEvent = angular.extend({}, $scope.selectEvent);
 		$scope.selectID = id; 
 		$('.overlay.sidebar') .sidebar({
 			overlay: true})
@@ -340,9 +340,9 @@ function getEvents(){
 
 
 	$scope.cancelEvent = function(){
-		$scope.events[$scope.selectID] = $scope.originalEvent;
+	//	$scope.events[$scope.selectID] = $scope.originalEvent;
 		$scope.selectEvent = null;
-		$scope.originalEvent = null;
+	//	$scope.originalEvent = null;
 		$scope.selectID = null; 
 
 		$('.overlay.sidebar') .sidebar({
@@ -351,7 +351,7 @@ function getEvents(){
 		delete $scope.newComment;
 	}
 
-	$scope.meetup = function(){
+	$scope.codraw = function(){
 
 		$scope.pCategory = "Category";
 		startdraw($scope.eventIDs[Object.keys($scope.eventIDs)[$scope.selectID]]);
@@ -406,7 +406,7 @@ function getEvents(){
 
 	$scope.showEvent = function(id){
 		$scope.selectEvent = $scope.events[id];
-		$scope.originalEvent = angular.extend({}, $scope.selectEvent);
+	//	$scope.originalEvent = angular.extend({}, $scope.selectEvent);
 		$scope.selectID = id; 
 		$('.overlay.sidebar') .sidebar({
 			overlay: true})
@@ -421,9 +421,9 @@ function getEvents(){
 
 
 	$scope.cancelEvent = function(){
-		$scope.events[$scope.selectID] = $scope.originalEvent;
+	//	$scope.events[$scope.selectID] = $scope.originalEvent;
 		$scope.selectEvent = null;
-		$scope.originalEvent = null;
+	//	$scope.originalEvent = null;
 		$scope.selectID = null; 
 
 		$('.overlay.sidebar') .sidebar({
