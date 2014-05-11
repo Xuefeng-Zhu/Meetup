@@ -31,8 +31,8 @@
         
         <div ng-show="auth.user" id="afterLogin">
           <img class="ui rounded mini image" id="userpic"src="https://graph.facebook.com/{{auth.user.id}}/picture">
-          <div class="positive ui button" id="message">Messages</div>
-          <a id="setting" ng-click="logout();" href=""><i class="big setting icon"></i></a>
+          <a class="positive ui button" id="message" href="#/Messages/Inbox">Messages</a>
+          <a id="setting" ng-click="logout();" href=""><i class="big sign out icon"></i></a>
         </div>
       </div>
 
@@ -130,7 +130,7 @@
       </div>
     </div>
 
-    <div class="twelve wide column" id="lists" style="overflow: scroll">
+    <div class="twelve wide column" id="lists" style="overflow-y: scroll">
       <div ng-view></div>
     </div>
   </div>
@@ -151,6 +151,7 @@
 <script src="lib/ace/mode-javascript.js"></script>
 <script src="lib/ace/theme-textmate.js"></script>
 <script src="lib/firepad.js"></script>
+<script src="lib/jquery.scrollTableBody-1.0.0.js"></script>
 
 <script src="lib/angular/angular.js"></script>
 <script src="lib/angular/angular-route.js"></script>

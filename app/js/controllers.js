@@ -538,4 +538,19 @@ function getEvents(){
 		$location.search({search: $scope.searchEvent});
 
 	}
+}])
+.controller('MessagesCtrl', ["$scope", "$rootScope", "$firebase", "$cookies", "$routeParams", function($scope, $rootScope, $firebase, $cookies, $routeParams) {
+
+	var category = $routeParams["folder"];
+
+	getEvents();
+
+
+
+
+function getEvents(){
+	//var ref = new Firebase(url + "/Public/events/" + category);
+	//$scope.events = $firebase(ref);
+}
+
 }]);

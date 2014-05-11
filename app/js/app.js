@@ -25,6 +25,11 @@ config(['$routeProvider', function($routeProvider) {
 		templateUrl: 'partials/public.html', 
 		controller: 'PublicCtrl'
 	});
+	$routeProvider.when('/Messages/:folder', {
+		templateUrl: 'partials/messages.html', 
+		controller: 'MessagesCtrl'
+	});
+
 //	$routeProvider.otherwise({
 //		redirectTo: '/Private'
 //	});
