@@ -22,8 +22,12 @@ angular.module('myApp.controllers', ['firebase','ngCookies'])
 		}
 		var ref = new Firebase(url + "/Messages/" + $rootScope.auth.user.id + "/receive");
 		ref.on('child_added', function(childSnapshot, prevChildName){
-			alertify.success("You receive a message");
+			if (!childSnapshot.val().read)
+			{
+				alertify.success("You receive a message");
+			}
 		})
+		var ref = new Firebase(url + "/Users");
 		var id = $cookies.id = $rootScope.auth.user.id;
 		$scope.user = $firebase(ref.child(id));
 		$scope.user.$on("loaded", function() {
@@ -429,7 +433,8 @@ function getEvents(){
 	var ref = new Firebase(url + "/Collaborating/users");
 	$scope.eventIDs = $firebase(ref).$child($cookies.id);
 	$scope.events = [];
-	setTimeout(function(){
+
+	$scope.eventIDs.$on("loaded", function(){
 		ref = new Firebase(url + "/Collaborating/events");
 		for(var id in $scope.eventIDs){
 			if (id.indexOf('$') == -1)
@@ -442,7 +447,7 @@ function getEvents(){
 				delete $scope.eventIDs[id];
 			}
 		}
-	},1000)
+	});
 }
 
 
@@ -508,7 +513,8 @@ $scope.sendMessage = function(){
         	"receiverId": $scope.selectEvent.createrId,
         	"receiverName": $scope.selectEvent.createrName,
         	"senderId": $rootScope.auth.user.id,
-        	"senderName": $rootScope.auth.user.displayName
+        	"senderName": $rootScope.auth.user.displayName,
+        	"read" : false
         };
         var ref = new Firebase(url + "/Messages/" + $scope.selectEvent.createrId + "/receive");
         ref.push(message);
