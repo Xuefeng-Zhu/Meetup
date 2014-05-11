@@ -164,3 +164,7 @@ i.icon.remove:hover{
   transform: scale(1.5);
   cursor: pointer;
 }
+
+#coedit-container {
+  position: absolute; left: 0; top: 0; bottom: 0; right: 0;
+}

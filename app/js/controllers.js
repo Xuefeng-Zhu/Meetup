@@ -98,16 +98,19 @@ angular.module('myApp.controllers', ['firebase','ngCookies'])
 
 	$scope.cancelPubL = function(){
 		$scope.PubLflag = false;
-		$scope.newList = "";
+		$('#public .typeahead')[1].value = "";
 	};
 
 	$scope.savePubl = function(e){
-		if (e.keyCode != 13 || $scope.newList == ""){
+		var pCategory = $('#public .typeahead')[1].value;
+
+		if (e.keyCode != 13 || pCategory == ""){
 			return;
 		}
 		var pCategory = $('#public .typeahead')[1].value;
 
 		$rootScope.pubCs.$child(pCategory).$set({name: pCategory, number: 0});
+		$('#public .typeahead')[1].value = "";
 		$scope.cancelPubL();
 	};
 
@@ -216,75 +219,75 @@ angular.module('myApp.controllers', ['firebase','ngCookies'])
 	$scope.showEvent = function(id){
 		$scope.selectEvent = $scope.events[id];
 	//	$scope.originalEvent = angular.extend({}, $scope.selectEvent);
-		$scope.selectID = id; 
-		$scope.picker2.setDate($scope.selectEvent.date);
-		$('.overlay.sidebar') .sidebar({
-			overlay: true})
-		.sidebar('toggle');
-	};
+	$scope.selectID = id; 
+	$scope.picker2.setDate($scope.selectEvent.date);
+	$('.overlay.sidebar') .sidebar({
+		overlay: true})
+	.sidebar('toggle');
+};
 
-	$scope.publishEvent = function(){
-		while(categories.pop());
-		getList();
-		$('#confirm-modal')
-		.modal('setting', {
-			closable  : true,
-			onDeny    : function(){
-			},
-			onApprove : function() {
-				var pCategory = $('#the-basics .typeahead')[1].value;
+$scope.publishEvent = function(){
+	while(categories.pop());
+	getList();
+	$('#confirm-modal')
+	.modal('setting', {
+		closable  : true,
+		onDeny    : function(){
+		},
+		onApprove : function() {
+			var pCategory = $('#the-basics .typeahead')[1].value;
 
-				if (categories.indexOf(pCategory) == -1)
-				{
-					categories.push(pCategory);
-					new Firebase(url + "/Public/categories").push(pCategory);
-				}
-
-				if ($scope.pCategory == "Category")
-				{
-					alert("Please choose the Category to add");
-					return false;
-				}
-
-				if (pCategory != ""){
-					var ref = new Firebase(url + "/Public/events/" + pCategory);
-					$firebase(ref).$child($scope.selectID).$set($scope.selectEvent);
-				}
-
-				var ref = new Firebase(url + "/Public/events/New");
-				$firebase(ref).$child($scope.selectID).$set($scope.selectEvent);
-				var ref = new Firebase(url + "/Collaborating/events");
-				$firebase(ref).$child($scope.selectID).$set($scope.selectEvent);
-
-				var ref = new Firebase(url + "/Collaborating/users/" + $cookies.id);
-				$firebase(ref).$child($scope.selectID).$set($scope.selectID);
-
+			if (categories.indexOf(pCategory) == -1)
+			{
+				categories.push(pCategory);
+				new Firebase(url + "/Public/categories").push(pCategory);
 			}
-		})
-.modal('show')
-;
+
+			if ($scope.pCategory == "Category")
+			{
+				alert("Please choose the Category to add");
+				return false;
+			}
+
+			if (pCategory != ""){
+				var ref = new Firebase(url + "/Public/events/" + pCategory);
+				$firebase(ref).$child($scope.selectID).$set($scope.selectEvent);
+			}
+
+			var ref = new Firebase(url + "/Public/events/New");
+			$firebase(ref).$child($scope.selectID).$set($scope.selectEvent);
+			var ref = new Firebase(url + "/Collaborating/events");
+			$firebase(ref).$child($scope.selectID).$set($scope.selectEvent);
+
+			var ref = new Firebase(url + "/Collaborating/users/" + $cookies.id);
+			$firebase(ref).$child($scope.selectID).$set($scope.selectID);
+
+		}
+	})
+	.modal('show')
+	;
 }
 
 $scope.saveEvent = function(){
 	$scope.events.$save($scope.selectID);
 	$scope.selectEvent = null;
 //	$scope.originalEvent = null;
-	$scope.selectID = null; 
+$scope.selectID = null; 
 
-	$('.overlay.sidebar') .sidebar({
-		overlay: true})
-	.sidebar('toggle');
+$('.overlay.sidebar') .sidebar({
+	overlay: true})
+.sidebar('toggle');
 }
 
 $scope.cancelEvent = function(){
 //	$scope.events[$scope.selectID] = $scope.originalEvent;
-	$scope.selectEvent = null;
+$scope.selectEvent = null;
 //	$scope.originalEvent = null;
-	$scope.selectID = null; 
+$scope.selectID = null; 
 
-	$('.overlay.sidebar') .sidebar({
-		overlay: true})
-	.sidebar('toggle');
+$('.overlay.sidebar') .sidebar({
+	overlay: true})
+.sidebar('toggle');
 }
 
 function getEvents(){
@@ -321,81 +324,112 @@ function getEvents(){
 		$("codraw").click(TowTruck);
 		$scope.selectEvent = $scope.events[id];
 	//	$scope.originalEvent = angular.extend({}, $scope.selectEvent);
-		$scope.selectID = id; 
-		$('.overlay.sidebar') .sidebar({
-			overlay: true})
-		.sidebar('toggle');
-	};
+	$scope.selectID = id; 
+	$('.overlay.sidebar') .sidebar({
+		overlay: true})
+	.sidebar('toggle');
+};
 
-	$scope.addComment = function(){
-		if(!$("#newComment").val()){
-			return;
-		}
-		var commentRef = new Firebase(url + "/Collaborating/events/" + $scope.eventIDs[Object.keys($scope.eventIDs)[$scope.selectID]] + "/comments");
-		commentRef.push({ author: $rootScope.auth.user.name, pic:"https://graph.facebook.com/" + $cookies.id + "/picture", content: $("#newComment").val()});
-		
-		commentRef.parent().once('value', function(dataSnapshot){
-			$scope.selectEvent = dataSnapshot.val();
-			$scope.events[$scope.selectID] = dataSnapshot.val();
-		})
-		$("#newComment").val("");
+$scope.addComment = function(){
+	if(!$("#newComment").val()){
+		return;
+	}
+	var commentRef = new Firebase(url + "/Collaborating/events/" + $scope.eventIDs[Object.keys($scope.eventIDs)[$scope.selectID]] + "/comments");
+	commentRef.push({ author: $rootScope.auth.user.name, pic:"https://graph.facebook.com/" + $cookies.id + "/picture", content: $("#newComment").val()});
 
-	};
+	commentRef.parent().once('value', function(dataSnapshot){
+		$scope.selectEvent = dataSnapshot.val();
+		$scope.events[$scope.selectID] = dataSnapshot.val();
+	})
+	$("#newComment").val("");
+
+};
 
 
-	$scope.cancelEvent = function(){
+$scope.cancelEvent = function(){
 	//	$scope.events[$scope.selectID] = $scope.originalEvent;
-		$scope.selectEvent = null;
+	$scope.selectEvent = null;
 	//	$scope.originalEvent = null;
-		$scope.selectID = null; 
+	$scope.selectID = null; 
 
-		$('.overlay.sidebar') .sidebar({
-			overlay: true})
-		.sidebar('toggle');
-	}
+	$('.overlay.sidebar') .sidebar({
+		overlay: true})
+	.sidebar('toggle');
+}
 
-	$scope.codraw = function(){
+$scope.codraw = function(){
 
-		$scope.pCategory = "Category";
-		TowTruck(this);
+	TowTruck(this);
 
-		startdraw($scope.eventIDs[Object.keys($scope.eventIDs)[$scope.selectID]]);
+	startdraw($scope.eventIDs[Object.keys($scope.eventIDs)[$scope.selectID]]);
 
-		$('#draw-modal')
-		.modal('setting', {
-			closable  : true,
-			onHide: function(){
-				TowTruck(this);
+	$('#draw-modal')
+	.modal('setting', {
+		closable  : true,
+		onHide: function(){
+			TowTruck(this);
+		}
+	})
+	.modal('show');
+
+}
+
+$scope.coedit = function(){
+
+	TowTruck(this);
+
+	var firepadRef = new Firebase(url + "/edit/" + $scope.eventIDs[Object.keys($scope.eventIDs)[$scope.selectID]]);
+	
+	var editor = ace.edit("coedit-container");
+	editor.setTheme("ace/theme/textmate");
+	var session = editor.getSession();
+	session.setUseWrapMode(true);
+	session.setUseWorker(false);
+	session.setMode("ace/mode/javascript");
+
+	var firepad = Firepad.fromACE(firepadRef, editor);
+
+	firepad.on('ready', function() {
+		if (firepad.isHistoryEmpty()) {
+			firepad.setText('//Start Code with you friends');
+		}
+	});
+
+	$('#edit-modal')
+	.modal('setting', {
+		closable  : true,
+		onHide: function(){
+			TowTruck(this);
+		}
+	})
+	.modal('show');
+
+}
+
+$scope.cleardraw = function(){
+	var pixelDataRef = new Firebase(url + "/draw/" + $scope.eventIDs[Object.keys($scope.eventIDs)[$scope.selectID]]);
+	pixelDataRef.remove();
+}
+
+function getEvents(){
+	var ref = new Firebase(url + "/Collaborating/users");
+	$scope.eventIDs = $firebase(ref).$child($cookies.id);
+	$scope.events = [];
+	setTimeout(function(){
+		ref = new Firebase(url + "/Collaborating/events");
+		for(var id in $scope.eventIDs){
+			if (id.indexOf('$') == -1)
+			{		
+				$scope.events.push($firebase(ref.child($scope.eventIDs[id])));
+
 			}
-		})
-		.modal('show');
-
-	}
-
-	$scope.cleardraw = function(){
-		var pixelDataRef = new Firebase(url + "/draw/" + $scope.eventIDs[Object.keys($scope.eventIDs)[$scope.selectID]]);
-		pixelDataRef.remove();
-	}
-
-	function getEvents(){
-		var ref = new Firebase(url + "/Collaborating/users");
-		$scope.eventIDs = $firebase(ref).$child($cookies.id);
-		$scope.events = [];
-		setTimeout(function(){
-			ref = new Firebase(url + "/Collaborating/events");
-			for(var id in $scope.eventIDs){
-				if (id.indexOf('$') == -1)
-				{		
-					$scope.events.push($firebase(ref.child($scope.eventIDs[id])));
-
-				}
-				else 
-				{
-					delete $scope.eventIDs[id];
-				}
+			else 
+			{
+				delete $scope.eventIDs[id];
 			}
-		},1000)
-	}
+		}
+	},1000)
+}
 
 
 }])
@@ -412,43 +446,43 @@ function getEvents(){
 	$scope.showEvent = function(id){
 		$scope.selectEvent = $scope.events[id];
 	//	$scope.originalEvent = angular.extend({}, $scope.selectEvent);
-		$scope.selectID = id; 
-		$('.overlay.sidebar') .sidebar({
-			overlay: true})
-		.sidebar('toggle');
-	};
+	$scope.selectID = id; 
+	$('.overlay.sidebar') .sidebar({
+		overlay: true})
+	.sidebar('toggle');
+};
 
-	$scope.addComment = function(){
-		if (!$("#newComment").val()){
-			return;
-		}
-		$scope.events.$child($scope.selectID).$child("comments").$add({ author: $rootScope.auth.user.name, pic:"https://graph.facebook.com/" + $cookies.id + "/picture", content: $("#newComment").val()});
-		$scope.selectEvent = $scope.events.$child($scope.selectID);
-		$("#newComment").val("");
-	};
-
-
-	$scope.cancelEvent = function(){
-	//	$scope.events[$scope.selectID] = $scope.originalEvent;
-		$scope.selectEvent = null;
-	//	$scope.originalEvent = null;
-		$scope.selectID = null; 
-
-		$('.overlay.sidebar') .sidebar({
-			overlay: true})
-		.sidebar('toggle');
-	};
-
-	$scope.joinEvent = function(){
-		var ref = new Firebase(url + "/Collaborating/users/" + $cookies.id);
-		$firebase(ref).$child($scope.selectID).$set($scope.selectID);
-		alertify.alert("Join Successfully");
-	};
-
-	function getEvents(){
-		var ref = new Firebase(url + "/Public/events/" + category);
-		$scope.events = $firebase(ref);
+$scope.addComment = function(){
+	if (!$("#newComment").val()){
+		return;
 	}
+	$scope.events.$child($scope.selectID).$child("comments").$add({ author: $rootScope.auth.user.name, pic:"https://graph.facebook.com/" + $cookies.id + "/picture", content: $("#newComment").val()});
+	$scope.selectEvent = $scope.events.$child($scope.selectID);
+	$("#newComment").val("");
+};
+
+
+$scope.cancelEvent = function(){
+	//	$scope.events[$scope.selectID] = $scope.originalEvent;
+	$scope.selectEvent = null;
+	//	$scope.originalEvent = null;
+	$scope.selectID = null; 
+
+	$('.overlay.sidebar') .sidebar({
+		overlay: true})
+	.sidebar('toggle');
+};
+
+$scope.joinEvent = function(){
+	var ref = new Firebase(url + "/Collaborating/users/" + $cookies.id);
+	$firebase(ref).$child($scope.selectID).$set($scope.selectID);
+	alertify.alert("Join Successfully");
+};
+
+function getEvents(){
+	var ref = new Firebase(url + "/Public/events/" + category);
+	$scope.events = $firebase(ref);
+}
 
 }])
 .controller('searchCtrl', ["$scope","$location", function($scope, $location) {
