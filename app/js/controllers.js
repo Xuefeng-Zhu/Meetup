@@ -22,7 +22,7 @@ angular.module('myApp.controllers', ['firebase','ngCookies'])
 		}
 		var id = $cookies.id = $rootScope.auth.user.id;
 		$scope.user = $firebase(ref.child(id));
-		if (!$scope.user){
+		if ($scope.user){
 			var email = $scope.auth.user.email;
 			var pic = "https://graph.facebook.com/" + id + "/picture";
 			var name = $scope.auth.user.name;
@@ -354,6 +354,8 @@ function getEvents(){
 	$scope.codraw = function(){
 
 		$scope.pCategory = "Category";
+		TowTruck(this);
+
 		startdraw($scope.eventIDs[Object.keys($scope.eventIDs)[$scope.selectID]]);
 
 		$('#draw-modal')
