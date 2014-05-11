@@ -7,7 +7,6 @@ angular.module('myApp.controllers', ['firebase','ngCookies'])
 .controller('userCtrl', ["$scope", "$rootScope", "$firebase", "$firebaseSimpleLogin", "$cookies", "$location", function($scope, $rootScope, $firebase,$firebaseSimpleLogin, $cookies, $location) {
 	
 	var ref = new Firebase(url + "/Users");
-	$scope.users = $firebase(ref);
 	$rootScope.auth = $firebaseSimpleLogin(ref);
 
 	$rootScope.$watch('auth.user', upload, true);
@@ -21,12 +20,13 @@ angular.module('myApp.controllers', ['firebase','ngCookies'])
 		if (!$rootScope.auth.user){
 			return;
 		}
-		var id = $rootScope.auth.user.id;
-		if (!$cookies.id){
+		var id = $cookies.id = $rootScope.auth.user.id;
+		$scope.user = $firebase(ref.child(id));
+		if (!$scope.user){
 			var email = $scope.auth.user.email;
 			var pic = "https://graph.facebook.com/" + id + "/picture";
 			var name = $scope.auth.user.name;
-			$scope.users.$child(id).$set({email:email, pic:pic, Username: name});
+			$scope.user.$set({email:email, pic:pic, Username: name});
 			ref = new Firebase(url + "/Private/" + id +"/categories");
 			ref.child("All").set({name: "All", number: 0});
 			$cookies.id = $rootScope.auth.user.id;
