@@ -20,7 +20,7 @@ angular.module('myApp.controllers', ['firebase','ngCookies'])
 		if (!$rootScope.auth.user){
 			return;
 		}
-		var ref = new Firebase(url + "/Messages" + $rootScope.auth.user.id + "/receive");
+		var ref = new Firebase(url + "/Messages/" + $rootScope.auth.user.id + "/receive");
 		ref.on('child_added', function(childSnapshot, prevChildName){
 			alertify.success("You receive a message");
 		})
