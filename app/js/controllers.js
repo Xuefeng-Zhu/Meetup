@@ -355,6 +355,7 @@ $scope.cancelEvent = function(){
 	$('.overlay.sidebar') .sidebar({
 		overlay: true})
 	.sidebar('toggle');
+	$("#newComment").val("");
 }
 
 $scope.codraw = function(){
@@ -471,6 +472,7 @@ $scope.cancelEvent = function(){
 	$('.overlay.sidebar') .sidebar({
 		overlay: true})
 	.sidebar('toggle');
+	$("#newComment").val("");
 };
 
 $scope.joinEvent = function(){
