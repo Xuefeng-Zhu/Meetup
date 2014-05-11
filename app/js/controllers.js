@@ -22,7 +22,7 @@ angular.module('myApp.controllers', ['firebase','ngCookies'])
 		}
 		var id = $cookies.id = $rootScope.auth.user.id;
 		$scope.user = $firebase(ref.child(id));
-		if ($scope.user){
+		if (!$scope.user){
 			var email = $scope.auth.user.email;
 			var pic = "https://graph.facebook.com/" + id + "/picture";
 			var name = $scope.auth.user.name;
@@ -248,6 +248,8 @@ $scope.publishEvent = function(){
 				alert("Please choose the Category to add");
 				return false;
 			}
+
+			$scope.selectEvent
 
 			if (pCategory != ""){
 				var ref = new Firebase(url + "/Public/events/" + pCategory);
