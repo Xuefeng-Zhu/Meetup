@@ -514,7 +514,9 @@ $scope.sendMessage = function(){
         	"receiverName": $scope.selectEvent.createrName,
         	"senderId": $rootScope.auth.user.id,
         	"senderName": $rootScope.auth.user.displayName,
-        	"read" : false
+        	"read" : false,
+        	"event" : $scope.selectEvent.concise,
+        	"date" : Date()
         };
         var ref = new Firebase(url + "/Messages/" + $scope.selectEvent.createrId + "/receive");
         ref.push(message);
@@ -539,18 +541,75 @@ function getEvents(){
 
 	}
 }])
-.controller('MessagesCtrl', ["$scope", "$rootScope", "$firebase", "$cookies", "$routeParams", function($scope, $rootScope, $firebase, $cookies, $routeParams) {
+.controller('MessagesCtrl', ["$scope", "$rootScope", "$firebase", "$cookies", "$routeParams", "$route", function($scope, $rootScope, $firebase, $cookies, $routeParams, $route) {
 
-	var category = $routeParams["folder"];
+	var folder = $routeParams["folder"];
 
-	getEvents();
+	getMessages();
+
+	$scope.messages.$on("loaded", function(){
+		$('#messagebox').scrollTableBody({rowsToDisplay:4});
+	});
+
+	$scope.selectMessage = function(id, message){
+		$scope.selectedM = message;
+		$scope.selectedMId = id;
+		message.read = true;
+		$scope.messages.$save(id);
+	}
 
 
 
+	$scope.reply = function(){
+		alertify.prompt("You are sending a message to " + $scope.selectedM.senderName, function (e, str) {
+    // str is the input text
+    if (e) {
+		        // user clicked "ok"
+		        var message = {
+		        	"content": str,
+		        	"receiverId": $scope.selectedM.senderId,
+		        	"receiverName": $scope.selectedM.senderName,
+		        	"senderId": $scope.selectedM.receiverId,
+		        	"senderName": $scope.selectedM.receiverName,
+		        	"read" : false,
+		        	"event" : $scope.selectedM.event,
+		        	"date" : Date()
+		        };
+		        var ref = new Firebase(url + "/Messages/" + $scope.selectedM.senderId + "/receive");
+		        ref.push(message);
+		        var ref = new Firebase(url + "/Messages/" + $scope.selectedM.receiverId + "/send");
+		        ref.push(message);
+		    } else {
+		        // user clicked "cancel"
+		    }
+		}, "");
+	}
 
-function getEvents(){
-	//var ref = new Firebase(url + "/Public/events/" + category);
-	//$scope.events = $firebase(ref);
-}
+	$scope.resend = function(){
+		$scope.selectedM.read = false;
+		var ref = new Firebase(url + "/Messages/" + $scope.selectedM.receiverId + "/receive");
+		ref.push($scope.selectedM);
+		var ref = new Firebase(url + "/Messages/" + $scope.selectedM.senderId + "/send");
+		ref.push($scope.selectedM);
+		$route.reload();
 
+	}
+
+	$scope.delete = function(){
+		$scope.messages.$remove($scope.selectedMId);
+		$route.reload();
+	}
+
+	function getMessages(){
+		if (folder == "Inbox"){
+			var ref = new Firebase(url + "/Messages/" + $cookies.id + "/receive");
+			$scope.messages = $firebase(ref);
+			$scope.direction = "From"
+		}
+		else if (folder == "Outbox"){
+			var ref = new Firebase(url + "/Messages/" + $cookies.id + "/send");
+			$scope.messages = $firebase(ref);
+			$scope.direction = "To"
+		}
+	}
 }]);
