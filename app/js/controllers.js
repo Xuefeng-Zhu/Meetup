@@ -22,15 +22,18 @@ angular.module('myApp.controllers', ['firebase','ngCookies'])
 		}
 		var id = $cookies.id = $rootScope.auth.user.id;
 		$scope.user = $firebase(ref.child(id));
-		if (!$scope.user){
-			var email = $scope.auth.user.email;
-			var pic = "https://graph.facebook.com/" + id + "/picture";
-			var name = $scope.auth.user.name;
-			$scope.user.$set({email:email, pic:pic, Username: name});
-			ref = new Firebase(url + "/Private/" + id +"/categories");
-			ref.child("All").set({name: "All", number: 0});
-			$cookies.id = $rootScope.auth.user.id;
-		}
+		$scope.user.$on("loaded", function() {
+			if (!$scope.user.email){
+				var email = $scope.auth.user.email;
+				var pic = "https://graph.facebook.com/" + id + "/picture";
+				var name = $scope.auth.user.name;
+				$scope.user.$set({email:email, pic:pic, Username: name});
+				ref = new Firebase(url + "/Private/" + id +"/categories");
+				ref.child("All").set({name: "All", number: 0});
+				$cookies.id = $rootScope.auth.user.id;
+			}
+		});
+		
 	};
 
 }])  
@@ -249,7 +252,8 @@ $scope.publishEvent = function(){
 				return false;
 			}
 
-			$scope.selectEvent
+			$scope.selectEvent["createrId"] = $rootScope.auth.user.id;
+			$scope.selectEvent["createrNmae"] = $rootScope.auth.user.displayName;
 
 			if (pCategory != ""){
 				var ref = new Firebase(url + "/Public/events/" + pCategory);
@@ -266,8 +270,8 @@ $scope.publishEvent = function(){
 
 		}
 	})
-	.modal('show')
-	;
+.modal('show')
+;
 }
 
 $scope.saveEvent = function(){
@@ -458,7 +462,7 @@ function getEvents(){
 		onHide: function(){
 			$("#newComment").val("");
 		}
-		})
+	})
 	.sidebar('toggle');
 };
 
