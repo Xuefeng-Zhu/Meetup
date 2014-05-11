@@ -377,11 +377,11 @@ function getEvents(){
 		$scope.eventIDs = $firebase(ref).$child($cookies.id);
 		$scope.events = [];
 		setTimeout(function(){
+			ref = new Firebase(url + "/Collaborating/events");
 			for(var id in $scope.eventIDs){
 				if (id.indexOf('$') == -1)
 				{		
-					ref = new Firebase(url + "/Collaborating/events/" + $scope.eventIDs[id]);
-					$scope.events.push($firebase(ref));
+					$scope.events.push($firebase(ref.child($scope.eventIDs[id])));
 
 				}
 				else 
