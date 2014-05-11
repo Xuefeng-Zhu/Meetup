@@ -20,6 +20,10 @@ angular.module('myApp.controllers', ['firebase','ngCookies'])
 		if (!$rootScope.auth.user){
 			return;
 		}
+		var ref = new Firebase(url + "/Messages" + $rootScope.auth.user.id + "/receive");
+		ref.on('child_added', function(childSnapshot, prevChildName){
+			alertify.success("You receive a message");
+		})
 		var id = $cookies.id = $rootScope.auth.user.id;
 		$scope.user = $firebase(ref.child(id));
 		$scope.user.$on("loaded", function() {
@@ -253,7 +257,7 @@ $scope.publishEvent = function(){
 			}
 
 			$scope.selectEvent["createrId"] = $rootScope.auth.user.id;
-			$scope.selectEvent["createrNmae"] = $rootScope.auth.user.displayName;
+			$scope.selectEvent["createrName"] = $rootScope.auth.user.displayName;
 
 			if (pCategory != ""){
 				var ref = new Firebase(url + "/Public/events/" + pCategory);
@@ -493,6 +497,28 @@ $scope.joinEvent = function(){
 	$firebase(ref).$child($scope.selectID).$set($scope.selectID);
 	alertify.alert("Join Successfully");
 };
+
+$scope.sendMessage = function(){
+	alertify.prompt("You are sending a message to " + $scope.selectEvent.createrName, function (e, str) {
+    // str is the input text
+    if (e) {
+        // user clicked "ok"
+        var message = {
+        	"content": str,
+        	"receiverId": $scope.selectEvent.createrId,
+        	"receiverName": $scope.selectEvent.createrName,
+        	"senderId": $rootScope.auth.user.id,
+        	"senderName": $rootScope.auth.user.displayName
+        };
+        var ref = new Firebase(url + "/Messages/" + $scope.selectEvent.createrId + "/receive");
+        ref.push(message);
+        var ref = new Firebase(url + "/Messages/" + $rootScope.auth.user.id + "/send");
+        ref.push(message);
+    } else {
+        // user clicked "cancel"
+    }
+}, "");
+}
 
 function getEvents(){
 	var ref = new Firebase(url + "/Public/events/" + category);
