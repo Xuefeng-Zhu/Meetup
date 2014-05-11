@@ -326,7 +326,10 @@ function getEvents(){
 	//	$scope.originalEvent = angular.extend({}, $scope.selectEvent);
 	$scope.selectID = id; 
 	$('.overlay.sidebar') .sidebar({
-		overlay: true})
+		overlay: true,
+		onHide: function(){
+			$("#newComment").val("");
+		}})
 	.sidebar('toggle');
 };
 
@@ -388,7 +391,7 @@ $scope.coedit = function(){
 	session.setUseWorker(false);
 	session.setMode("ace/mode/javascript");
 
-	var firepad = Firepad.fromACE(firepadRef, editor);
+	var firepad = Firepad.fromACE(firepadRef, editor,  { richTextToolbar: true, richTextShortcuts: true });
 
 	firepad.on('ready', function() {
 		if (firepad.isHistoryEmpty()) {
@@ -449,7 +452,11 @@ function getEvents(){
 	//	$scope.originalEvent = angular.extend({}, $scope.selectEvent);
 	$scope.selectID = id; 
 	$('.overlay.sidebar') .sidebar({
-		overlay: true})
+		overlay: true,
+		onHide: function(){
+			$("#newComment").val("");
+		}
+		})
 	.sidebar('toggle');
 };
 
