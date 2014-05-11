@@ -16,7 +16,7 @@
       <th class="ten wide">Content</th>
     </tr></thead>
     <tbody>
-      <tr ng-class="{unread: !message.read}" ng-repeat="(mid, message) in messages | orderByPriority|orderBy:'date':true" ng-click="selectMessage(mid, message)">
+      <tr ng-class="{unread: !message.read}" ng-repeat="(mid, message) in messages" ng-click="selectMessage(mid, message)">
         <td ng-show="direction == 'From'">{{message.senderName}}</td>
         <td ng-show="direction == 'To'">{{message.receiverName}}</td>
         <td>{{message.event}}</td>
