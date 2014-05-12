@@ -4,6 +4,7 @@
 Work split-up: 
 
     Xuefeng Zhu: UI design, Design database schema, Write most functional code, Brainstorm new ideas and functionality, Debug 
+	
 	Xue Zou: UI design, data structure design, Facebook log-in, testing
 
 ##Overview:
