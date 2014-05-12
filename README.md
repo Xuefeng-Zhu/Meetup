@@ -15,27 +15,29 @@ A website that helps you plan your schedule:
 	Details of each task
 	Date to finish
 
-A platform where you collaborate with other people
-*Event-sharing
-*Comment/Discuss
-*Instant private messages
-*Demonstrate work to teammates, like drawing and coediting 
+A platform where you collaborate with other people:
+
+	Event-sharing
+	Comment/Discuss
+	Instant private messages
+	Demonstrate work to teammates, like drawing and coediting 
 
 ##Thanks to 
-*AceEditor: http://ace.c9.io/#nav=about
-*Alertify:  http://fabien-d.github.io/alertify.js/
-*Angularfire: https://www.firebase.com/quickstart/angularjs.html
-*AngularJs: https://angularjs.org/
-*Firebase: https://www.firebase.com/
-*FireDraw: https://www.firebase.com/tutorial/#session/t4q0xmr5ssy 
-*FirePad: https://github.com/firebase/firepad
-*Jquery: http://jquery.com/
-*jquery.scrollTableBody: https://github.com/nheldman/jquery.scrollTableBody
-*ng-Fx: https://github.com/Hendrixer/ng-Fx
-*Pikaday: https://github.com/dbushell/Pikaday
-*SemanticUI: http://semantic-ui.com/
-*Togetherjs: https://togetherjs.com/
-*Typeahead: http://twitter.github.io/typeahead.js/
+
+	AceEditor: http://ace.c9.io/#nav=about
+	Alertify:  http://fabien-d.github.io/alertify.js/
+	Angularfire: https://www.firebase.com/quickstart/angularjs.html
+	AngularJs: https://angularjs.org/
+	Firebase: https://www.firebase.com/
+	FireDraw: https://www.firebase.com/tutorial/#session/t4q0xmr5ssy 
+	FirePad: https://github.com/firebase/firepad
+	Jquery: http://jquery.com/
+	jquery.scrollTableBody: https://github.com/nheldman/jquery.scrollTableBody
+	ng-Fx: https://github.com/Hendrixer/ng-Fx
+	Pikaday: https://github.com/dbushell/Pikaday
+	SemanticUI: http://semantic-ui.com/
+	Togetherjs: https://togetherjs.com/
+	Typeahead: http://twitter.github.io/typeahead.js/
 
 ##License 
 MIT
