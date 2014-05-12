@@ -6,16 +6,19 @@ var url = "https://meetup2014.firebaseIO.com";
 angular.module('myApp.controllers', ['firebase','ngCookies'])
 .controller('userCtrl', ["$scope", "$rootScope", "$firebase", "$firebaseSimpleLogin", "$cookies", "$location", function($scope, $rootScope, $firebase,$firebaseSimpleLogin, $cookies, $location) {
 	
+	//use for user logining 
 	var ref = new Firebase(url + "/Users");
 	$rootScope.auth = $firebaseSimpleLogin(ref);
 
 	$rootScope.$watch('auth.user', upload, true);
 
+	//function to run when user logout 
 	$scope.logout = function(){
 		$rootScope.auth.$logout();
 		$location.path("");
 	}
 
+	//upload user information when first visit and create message listener 
 	function upload(){
 		if (!$rootScope.auth.user){
 			return;
@@ -47,6 +50,7 @@ angular.module('myApp.controllers', ['firebase','ngCookies'])
 }])  
 .controller('listCtrl', ["$scope", "$rootScope", "$firebase", "$cookies", function($scope, $rootScope, $firebase, $cookies) {
 	
+	//monitor auth user 
 	$rootScope.$watch('auth.user', function(){
 		if($rootScope.auth.user){
 			getCategories();
@@ -61,7 +65,7 @@ angular.module('myApp.controllers', ['firebase','ngCookies'])
 	$scope.selectLid = null;
 	$scope.PrvLflag = false;
 
-	
+	//funtions used to manipulate list 
 	$scope.selectList = function(lid, pcp){
 		$scope.selectLid = lid;
 		$scope.pcp = pcp;
@@ -125,6 +129,7 @@ angular.module('myApp.controllers', ['firebase','ngCookies'])
 		$scope.cancelPubL();
 	};
 
+	//read all lists 
 	function getCategories(){
 		var ref = new Firebase(url + "/Private/" + $cookies.id + "/categories");
 		$rootScope.prvCs = $firebase(ref);
@@ -135,7 +140,7 @@ angular.module('myApp.controllers', ['firebase','ngCookies'])
 
 	}
 
-
+	//inisial typeahead 
 	$('#public .typeahead').typeahead({
 		hint: true,
 		highlight: true,
@@ -158,6 +163,7 @@ angular.module('myApp.controllers', ['firebase','ngCookies'])
 
 	getEvents();
 
+	//initial data picker 
 	$scope.picker = new Pikaday(
 	{
 		field: $('#datepicker')[0],
@@ -177,6 +183,7 @@ angular.module('myApp.controllers', ['firebase','ngCookies'])
 		maxDate: new Date('2020-12-31'),
 	});
 
+	//tottle the event complete 
 	$scope.toggleCompleted = function(id){
 		setTimeout(function() {
 			var event = $scope.events[id];
@@ -205,6 +212,7 @@ angular.module('myApp.controllers', ['firebase','ngCookies'])
 
 	};
 
+	//add new event 
 	$scope.addEvent = function(){
 		var concise = $scope.concise.trim();
 		if (concise == "") {
@@ -223,10 +231,12 @@ angular.module('myApp.controllers', ['firebase','ngCookies'])
 		$scope.concise = '';
 	}
 
+	//remove event 
 	$scope.removeEvent = function(id){
 		$scope.events.$remove(id);
 	};
 
+	//show event detail 
 	$scope.showEvent = function(id){
 		$scope.selectEvent = $scope.events[id];
 	//	$scope.originalEvent = angular.extend({}, $scope.selectEvent);
@@ -234,83 +244,86 @@ angular.module('myApp.controllers', ['firebase','ngCookies'])
 	$scope.picker2.setDate($scope.selectEvent.date);
 	$('.overlay.sidebar') .sidebar({
 		overlay: true})
-	.sidebar('toggle');
-};
+		.sidebar('toggle');
+	};
 
-$scope.publishEvent = function(){
-	while(categories.pop());
-	getList();
-	$('#confirm-modal')
-	.modal('setting', {
-		closable  : true,
-		onDeny    : function(){
-		},
-		onApprove : function() {
-			var pCategory = $('#the-basics .typeahead')[1].value;
+	//publish a event to the public list
+	$scope.publishEvent = function(){
+		while(categories.pop());
+		getList();
+		$('#confirm-modal')
+		.modal('setting', {
+			closable  : true,
+			onDeny    : function(){
+			},
+			onApprove : function() {
+				var pCategory = $('#the-basics .typeahead')[1].value;	
 
-			if (categories.indexOf(pCategory) == -1)
-			{
-				categories.push(pCategory);
-				new Firebase(url + "/Public/categories").push(pCategory);
-			}
+				if (categories.indexOf(pCategory) == -1)
+				{
+					categories.push(pCategory);
+					new Firebase(url + "/Public/categories").push(pCategory);
+				}	
 
-			if ($scope.pCategory == "Category")
-			{
-				alert("Please choose the Category to add");
-				return false;
-			}
+				if ($scope.pCategory == "Category")
+				{
+					alert("Please choose the Category to add");
+					return false;
+				}	
 
-			$scope.selectEvent["createrId"] = $rootScope.auth.user.id;
-			$scope.selectEvent["createrName"] = $rootScope.auth.user.displayName;
+				$scope.selectEvent["createrId"] = $rootScope.auth.user.id;
+				$scope.selectEvent["createrName"] = $rootScope.auth.user.displayName;	
 
-			if (pCategory != ""){
-				var ref = new Firebase(url + "/Public/events/" + pCategory);
+				if (pCategory != ""){
+					var ref = new Firebase(url + "/Public/events/" + pCategory);
+					$firebase(ref).$child($scope.selectID).$set($scope.selectEvent);
+				}	
+
+				var ref = new Firebase(url + "/Public/events/New");
 				$firebase(ref).$child($scope.selectID).$set($scope.selectEvent);
+				var ref = new Firebase(url + "/Collaborating/events");
+				$firebase(ref).$child($scope.selectID).$set($scope.selectEvent);	
+
+				var ref = new Firebase(url + "/Collaborating/users/" + $cookies.id);
+				$firebase(ref).$child($scope.selectID).$set($scope.selectID);	
+
 			}
+		})
+	.modal('show')
+	;
+	}	
 
-			var ref = new Firebase(url + "/Public/events/New");
-			$firebase(ref).$child($scope.selectID).$set($scope.selectEvent);
-			var ref = new Firebase(url + "/Collaborating/events");
-			$firebase(ref).$child($scope.selectID).$set($scope.selectEvent);
+	//save event details 
+	$scope.saveEvent = function(){
+		$scope.events.$save($scope.selectID);
+		$scope.selectEvent = null;
+	//	$scope.originalEvent = null;
+	$scope.selectID = null; 	
 
-			var ref = new Firebase(url + "/Collaborating/users/" + $cookies.id);
-			$firebase(ref).$child($scope.selectID).$set($scope.selectID);
+	$('.overlay.sidebar') .sidebar({
+		overlay: true})
+	.sidebar('toggle');
+	}	
 
-		}
-	})
-.modal('show')
-;
-}
-
-$scope.saveEvent = function(){
-	$scope.events.$save($scope.selectID);
+	//revert event to orginal state
+	$scope.cancelEvent = function(){
+	//	$scope.events[$scope.selectID] = $scope.originalEvent;
 	$scope.selectEvent = null;
-//	$scope.originalEvent = null;
-$scope.selectID = null; 
+	//	$scope.originalEvent = null;
+	$scope.selectID = null; 	
 
-$('.overlay.sidebar') .sidebar({
-	overlay: true})
-.sidebar('toggle');
-}
+	$('.overlay.sidebar') .sidebar({
+		overlay: true})
+	.sidebar('toggle');
+	}	
 
-$scope.cancelEvent = function(){
-//	$scope.events[$scope.selectID] = $scope.originalEvent;
-$scope.selectEvent = null;
-//	$scope.originalEvent = null;
-$scope.selectID = null; 
+	//load events from server
+	function getEvents(){
+		var ref = new Firebase(url + "/Private/" + $cookies.id + "/events");
+		$scope.events = $firebase(ref);
+	}	
 
-$('.overlay.sidebar') .sidebar({
-	overlay: true})
-.sidebar('toggle');
-}
-
-function getEvents(){
-	var ref = new Firebase(url + "/Private/" + $cookies.id + "/events");
-	$scope.events = $firebase(ref);
-}
-
-	//typeahdead
-
+		//typeahdead	
 	$('#the-basics .typeahead').typeahead({
 		hint: true,
 		highlight: true,
@@ -334,6 +347,7 @@ function getEvents(){
 	$('.ui.dropdown')
 	.dropdown();
 	
+	//show event details 
 	$scope.showEvent = function(id){
 		$("codraw").click(TowTruck);
 		$scope.selectEvent = $scope.events[id];
@@ -347,6 +361,7 @@ function getEvents(){
 		.sidebar('toggle');
 	};
 
+	//add user comment to the vent 
 	$scope.addComment = function(){
 		if($("#newComment").val().trim().length == 0){
 			return;
@@ -370,7 +385,7 @@ function getEvents(){
 
 	};	
 	
-
+	//revert event 
 	$scope.cancelEvent = function(){
 		//	$scope.events[$scope.selectID] = $scope.originalEvent;
 		$scope.selectEvent = null;
@@ -383,6 +398,7 @@ function getEvents(){
 		$("#newComment").val("");
 	}	
 
+	//launch codraw application 
 	$scope.codraw = function(){	
 
 		TowTruck(this);	
@@ -400,6 +416,7 @@ function getEvents(){
 
 	}	
 
+	//launch coedit application 
 	$scope.coedit = function(){	
 
 		TowTruck(this);	
@@ -434,11 +451,13 @@ function getEvents(){
 
 	}	
 
+	//clear the draw canvas 
 	$scope.cleardraw = function(){
 		var pixelDataRef = new Firebase(url + "/draw/" + $scope.eventIDs[Object.keys($scope.eventIDs)[$scope.selectID]]);
 		pixelDataRef.remove();
 	}	
 
+	//send a message to others 
 	$scope.sendMessage = function(receiverName, receiverId){
 		alertify.prompt("You are sending a message to " + receiverName, function (e, str) {
 	    // str is the input text
@@ -464,6 +483,7 @@ function getEvents(){
 	}, "");
 	}	
 
+	//load all collaboaring events 
 	function getEvents(){
 		var ref = new Firebase(url + "/Collaborating/users");
 		$scope.eventIDs = $firebase(ref).$child($cookies.id);
@@ -496,7 +516,7 @@ function getEvents(){
 
 	getEvents();
 
-
+	//show event details 
 	$scope.showEvent = function(id){
 		$scope.selectEvent = $scope.events[id];
 	//	$scope.originalEvent = angular.extend({}, $scope.selectEvent);
@@ -510,6 +530,7 @@ function getEvents(){
 		.sidebar('toggle');
 	};
 
+	//let user add comment to the event
 	$scope.addComment = function(){
 		if ($("#newComment").val().trim().length == 0){
 			return;
@@ -525,7 +546,7 @@ function getEvents(){
 		$("#newComment").val("");
 	};	
 	
-
+	//revert event 
 	$scope.cancelEvent = function(){
 		//	$scope.events[$scope.selectID] = $scope.originalEvent;
 		$scope.selectEvent = null;
@@ -538,12 +559,14 @@ function getEvents(){
 		$("#newComment").val("");
 	};	
 
+	//join the event
 	$scope.joinEvent = function(){
 		var ref = new Firebase(url + "/Collaborating/users/" + $cookies.id);
 		$firebase(ref).$child($scope.selectID).$set($scope.selectID);
 		alertify.alert("Join Successfully");
 	};	
 
+	//send a message to other user 
 	$scope.sendMessage = function(receiverName, receiverId){
 		alertify.prompt("You are sending a message to " + receiverName, function (e, str) {
 	    // str is the input text
@@ -569,6 +592,7 @@ function getEvents(){
 	}, "");
 	}	
 
+	//load events 
 	function getEvents(){
 		var ref = new Firebase(url + "/Public/events/" + category);
 		$scope.events = $firebase(ref);
@@ -592,6 +616,7 @@ function getEvents(){
 		$('#messagebox').scrollTableBody({rowsToDisplay:4});
 	});
 
+	//select message from table
 	$scope.selectMessage = function(id, message){
 		$scope.selectedM = message;
 		$scope.selectedMId = id;
@@ -600,7 +625,7 @@ function getEvents(){
 	}
 
 
-
+	//reply to message
 	$scope.reply = function(){
 		alertify.prompt("You are sending a message to " + $scope.selectedM.senderName, function (e, str) {
     // str is the input text
@@ -626,6 +651,7 @@ function getEvents(){
 		}, "");
 	}
 
+	//resend the same message
 	$scope.resend = function(){
 		$scope.selectedM.read = false;
 		var ref = new Firebase(url + "/Messages/" + $scope.selectedM.receiverId + "/receive");
@@ -636,11 +662,13 @@ function getEvents(){
 
 	}
 
+	//delete message from list
 	$scope.delete = function(){
 		$scope.messages.$remove($scope.selectedMId);
 		$route.reload();
 	}
 
+	//load messages 
 	function getMessages(){
 		if (folder == "Inbox"){
 			var ref = new Firebase(url + "/Messages/" + $cookies.id + "/receive");
