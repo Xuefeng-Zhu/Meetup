@@ -426,6 +426,8 @@ function getEvents(){
 			closable  : true,
 			onHide: function(){
 				TowTruck(this);
+				firepad.dispose();
+				firepad.setText('');
 			}
 		})
 		.modal('show');	
