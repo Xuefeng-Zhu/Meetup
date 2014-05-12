@@ -348,7 +348,7 @@ function getEvents(){
 	};
 
 	$scope.addComment = function(){
-		if(!$("#newComment").val()){
+		if($("#newComment").val().trim().length == 0){
 			return;
 		}	
 
@@ -509,7 +509,7 @@ function getEvents(){
 	};
 
 	$scope.addComment = function(){
-		if (!$("#newComment").val()){
+		if ($("#newComment").val().trim().length == 0){
 			return;
 		}
 		var newComment = { 
