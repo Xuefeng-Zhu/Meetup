@@ -50,7 +50,7 @@
       <div class="ui comments">
         <div class="comment" ng-repeat="comment in selectEvent.comments">
           <a class="avatar">
-            <img src="{{comment.pic}}">
+            <img src="{{comment.pic}}" ng-click="sendMessage(comment.author, comment.authorId)">
           </a>
           <div class="content">
             <a class="author">{{comment.author}}</a>

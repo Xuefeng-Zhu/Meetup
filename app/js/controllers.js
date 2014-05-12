@@ -338,117 +338,150 @@ function getEvents(){
 		$("codraw").click(TowTruck);
 		$scope.selectEvent = $scope.events[id];
 	//	$scope.originalEvent = angular.extend({}, $scope.selectEvent);
-	$scope.selectID = id; 
-	$('.overlay.sidebar') .sidebar({
-		overlay: true,
-		onHide: function(){
-			$("#newComment").val("");
-		}})
-	.sidebar('toggle');
-};
+		$scope.selectID = id; 
+		$('.overlay.sidebar') .sidebar({
+			overlay: true,
+			onHide: function(){
+				$("#newComment").val("");
+			}})
+		.sidebar('toggle');
+	};
 
-$scope.addComment = function(){
-	if(!$("#newComment").val()){
-		return;
-	}
-	var commentRef = new Firebase(url + "/Collaborating/events/" + $scope.eventIDs[Object.keys($scope.eventIDs)[$scope.selectID]] + "/comments");
-	commentRef.push({ author: $rootScope.auth.user.name, pic:"https://graph.facebook.com/" + $cookies.id + "/picture", content: $("#newComment").val()});
+	$scope.addComment = function(){
+		if(!$("#newComment").val()){
+			return;
+		}	
 
-	commentRef.parent().once('value', function(dataSnapshot){
-		$scope.selectEvent = dataSnapshot.val();
-		$scope.events[$scope.selectID] = dataSnapshot.val();
-	})
-	$("#newComment").val("");
+		var newComment = { 
+			author: $rootScope.auth.user.name,
+			authorId: $rootScope.auth.user.id,
+			pic:"https://graph.facebook.com/" + $cookies.id + "/picture", 
+			content: $("#newComment").val()
+		}	
 
-};
+		var commentRef = new Firebase(url + "/Collaborating/events/" + $scope.eventIDs[Object.keys($scope.eventIDs)[$scope.selectID]] + "/comments");
+		commentRef.push(newComment);	
 
+		commentRef.parent().once('value', function(dataSnapshot){
+			$scope.selectEvent = dataSnapshot.val();
+			$scope.events[$scope.selectID] = dataSnapshot.val();
+		})
+		$("#newComment").val("");	
 
-$scope.cancelEvent = function(){
-	//	$scope.events[$scope.selectID] = $scope.originalEvent;
-	$scope.selectEvent = null;
-	//	$scope.originalEvent = null;
-	$scope.selectID = null; 
-
-	$('.overlay.sidebar') .sidebar({
-		overlay: true})
-	.sidebar('toggle');
-	$("#newComment").val("");
-}
-
-$scope.codraw = function(){
-
-	TowTruck(this);
-
-	startdraw($scope.eventIDs[Object.keys($scope.eventIDs)[$scope.selectID]]);
-
-	$('#draw-modal')
-	.modal('setting', {
-		closable  : true,
-		onHide: function(){
-			TowTruck(this);
-		}
-	})
-	.modal('show');
-
-}
-
-$scope.coedit = function(){
-
-	TowTruck(this);
-
-	var firepadRef = new Firebase(url + "/edit/" + $scope.eventIDs[Object.keys($scope.eventIDs)[$scope.selectID]]);
+	};	
 	
-	var editor = ace.edit("coedit-container");
-	editor.setTheme("ace/theme/textmate");
-	var session = editor.getSession();
-	session.setUseWrapMode(true);
-	session.setUseWorker(false);
-	session.setMode("ace/mode/javascript");
 
-	var firepad = Firepad.fromACE(firepadRef, editor);
+	$scope.cancelEvent = function(){
+		//	$scope.events[$scope.selectID] = $scope.originalEvent;
+		$scope.selectEvent = null;
+		//	$scope.originalEvent = null;
+		$scope.selectID = null; 	
 
-	firepad.on('ready', function() {
-		if (firepad.isHistoryEmpty()) {
-			firepad.setText('//Start Code with you friends');
-		}
-	});
+		$('.overlay.sidebar') .sidebar({
+			overlay: true})
+		.sidebar('toggle');
+		$("#newComment").val("");
+	}	
 
-	$('#edit-modal')
-	.modal('setting', {
-		closable  : true,
-		onHide: function(){
-			TowTruck(this);
-		}
-	})
-	.modal('show');
+	$scope.codraw = function(){	
 
-}
+		TowTruck(this);	
 
-$scope.cleardraw = function(){
-	var pixelDataRef = new Firebase(url + "/draw/" + $scope.eventIDs[Object.keys($scope.eventIDs)[$scope.selectID]]);
-	pixelDataRef.remove();
-}
+		startdraw($scope.eventIDs[Object.keys($scope.eventIDs)[$scope.selectID]]);	
 
-function getEvents(){
-	var ref = new Firebase(url + "/Collaborating/users");
-	$scope.eventIDs = $firebase(ref).$child($cookies.id);
-	$scope.events = [];
-
-	$scope.eventIDs.$on("loaded", function(){
-		ref = new Firebase(url + "/Collaborating/events");
-		for(var id in $scope.eventIDs){
-			if (id.indexOf('$') == -1)
-			{		
-				$scope.events.push($firebase(ref.child($scope.eventIDs[id])));
-
+		$('#draw-modal')
+		.modal('setting', {
+			closable  : true,
+			onHide: function(){
+				TowTruck(this);
 			}
-			else 
-			{
-				delete $scope.eventIDs[id];
+		})
+		.modal('show');	
+
+	}	
+
+	$scope.coedit = function(){	
+
+		TowTruck(this);	
+
+		var firepadRef = new Firebase(url + "/edit/" + $scope.eventIDs[Object.keys($scope.eventIDs)[$scope.selectID]]);
+		
+		var editor = ace.edit("coedit-container");
+		editor.setTheme("ace/theme/textmate");
+		var session = editor.getSession();
+		session.setUseWrapMode(true);
+		session.setUseWorker(false);
+		session.setMode("ace/mode/javascript");	
+
+		var firepad = Firepad.fromACE(firepadRef, editor);	
+
+		firepad.on('ready', function() {
+			if (firepad.isHistoryEmpty()) {
+				firepad.setText('//Start Code with you friends');
 			}
-		}
-	});
-}
+		});	
+
+		$('#edit-modal')
+		.modal('setting', {
+			closable  : true,
+			onHide: function(){
+				TowTruck(this);
+			}
+		})
+		.modal('show');	
+
+	}	
+
+	$scope.cleardraw = function(){
+		var pixelDataRef = new Firebase(url + "/draw/" + $scope.eventIDs[Object.keys($scope.eventIDs)[$scope.selectID]]);
+		pixelDataRef.remove();
+	}	
+
+	$scope.sendMessage = function(receiverName, receiverId){
+		alertify.prompt("You are sending a message to " + receiverName, function (e, str) {
+	    // str is the input text
+	    if (e) {
+	        // user clicked "ok"
+	        var message = {
+	        	"content": str,
+	        	"receiverId": receiverId,
+	        	"receiverName": receiverName,
+	        	"senderId": $rootScope.auth.user.id,
+	        	"senderName": $rootScope.auth.user.displayName,
+	        	"read" : false,
+	        	"event" : $scope.selectEvent.concise,
+	        	"date" : Date()
+	        };
+	        var ref = new Firebase(url + "/Messages/" + receiverId + "/receive");
+	        ref.push(message);
+	        var ref = new Firebase(url + "/Messages/" + $rootScope.auth.user.id + "/send");
+	        ref.push(message);
+	    } else {
+	        // user clicked "cancel"
+	    }
+	}, "");
+	}	
+
+	function getEvents(){
+		var ref = new Firebase(url + "/Collaborating/users");
+		$scope.eventIDs = $firebase(ref).$child($cookies.id);
+		$scope.events = [];	
+
+		$scope.eventIDs.$on("loaded", function(){
+			ref = new Firebase(url + "/Collaborating/events");
+			for(var id in $scope.eventIDs){
+				if (id.indexOf('$') == -1)
+				{		
+					$scope.events.push($firebase(ref.child($scope.eventIDs[id])));	
+
+				}
+				else 
+				{
+					delete $scope.eventIDs[id];
+				}
+			}
+		});
+	}
 
 
 }])
@@ -465,81 +498,87 @@ function getEvents(){
 	$scope.showEvent = function(id){
 		$scope.selectEvent = $scope.events[id];
 	//	$scope.originalEvent = angular.extend({}, $scope.selectEvent);
-	$scope.selectID = id; 
-	$('.overlay.sidebar') .sidebar({
-		overlay: true,
-		onHide: function(){
-			$("#newComment").val("");
+		$scope.selectID = id; 
+		$('.overlay.sidebar') .sidebar({
+			overlay: true,
+			onHide: function(){
+				$("#newComment").val("");
+			}
+		})
+		.sidebar('toggle');
+	};
+
+	$scope.addComment = function(){
+		if (!$("#newComment").val()){
+			return;
 		}
-	})
-	.sidebar('toggle');
-};
+		var newComment = { 
+			author: $rootScope.auth.user.name,
+			authorId: $rootScope.auth.user.id,
+			pic:"https://graph.facebook.com/" + $cookies.id + "/picture", 
+			content: $("#newComment").val()
+		}
+		$scope.events.$child($scope.selectID).$child("comments").$add(newComment);
+		$scope.selectEvent = $scope.events.$child($scope.selectID);
+		$("#newComment").val("");
+	};	
+	
 
-$scope.addComment = function(){
-	if (!$("#newComment").val()){
-		return;
-	}
-	$scope.events.$child($scope.selectID).$child("comments").$add({ author: $rootScope.auth.user.name, pic:"https://graph.facebook.com/" + $cookies.id + "/picture", content: $("#newComment").val()});
-	$scope.selectEvent = $scope.events.$child($scope.selectID);
-	$("#newComment").val("");
-};
+	$scope.cancelEvent = function(){
+		//	$scope.events[$scope.selectID] = $scope.originalEvent;
+		$scope.selectEvent = null;
+		//	$scope.originalEvent = null;
+		$scope.selectID = null; 	
 
+		$('.overlay.sidebar') .sidebar({
+			overlay: true})
+		.sidebar('toggle');
+		$("#newComment").val("");
+	};	
 
-$scope.cancelEvent = function(){
-	//	$scope.events[$scope.selectID] = $scope.originalEvent;
-	$scope.selectEvent = null;
-	//	$scope.originalEvent = null;
-	$scope.selectID = null; 
+	$scope.joinEvent = function(){
+		var ref = new Firebase(url + "/Collaborating/users/" + $cookies.id);
+		$firebase(ref).$child($scope.selectID).$set($scope.selectID);
+		alertify.alert("Join Successfully");
+	};	
 
-	$('.overlay.sidebar') .sidebar({
-		overlay: true})
-	.sidebar('toggle');
-	$("#newComment").val("");
-};
+	$scope.sendMessage = function(receiverName, receiverId){
+		alertify.prompt("You are sending a message to " + receiverName, function (e, str) {
+	    // str is the input text
+	    if (e) {
+	        // user clicked "ok"
+	        var message = {
+	        	"content": str,
+	        	"receiverId": receiverId,
+	        	"receiverName": receiverName,
+	        	"senderId": $rootScope.auth.user.id,
+	        	"senderName": $rootScope.auth.user.displayName,
+	        	"read" : false,
+	        	"event" : $scope.selectEvent.concise,
+	        	"date" : Date()
+	        };
+	        var ref = new Firebase(url + "/Messages/" + receiverId + "/receive");
+	        ref.push(message);
+	        var ref = new Firebase(url + "/Messages/" + $rootScope.auth.user.id + "/send");
+	        ref.push(message);
+	    } else {
+	        // user clicked "cancel"
+	    }
+	}, "");
+	}	
 
-$scope.joinEvent = function(){
-	var ref = new Firebase(url + "/Collaborating/users/" + $cookies.id);
-	$firebase(ref).$child($scope.selectID).$set($scope.selectID);
-	alertify.alert("Join Successfully");
-};
+	function getEvents(){
+		var ref = new Firebase(url + "/Public/events/" + category);
+		$scope.events = $firebase(ref);
+	}	
 
-$scope.sendMessage = function(){
-	alertify.prompt("You are sending a message to " + $scope.selectEvent.createrName, function (e, str) {
-    // str is the input text
-    if (e) {
-        // user clicked "ok"
-        var message = {
-        	"content": str,
-        	"receiverId": $scope.selectEvent.createrId,
-        	"receiverName": $scope.selectEvent.createrName,
-        	"senderId": $rootScope.auth.user.id,
-        	"senderName": $rootScope.auth.user.displayName,
-        	"read" : false,
-        	"event" : $scope.selectEvent.concise,
-        	"date" : Date()
-        };
-        var ref = new Firebase(url + "/Messages/" + $scope.selectEvent.createrId + "/receive");
-        ref.push(message);
-        var ref = new Firebase(url + "/Messages/" + $rootScope.auth.user.id + "/send");
-        ref.push(message);
-    } else {
-        // user clicked "cancel"
-    }
-}, "");
-}
+	}])
+	.controller('searchCtrl', ["$scope","$location", function($scope, $location) {	
 
-function getEvents(){
-	var ref = new Firebase(url + "/Public/events/" + category);
-	$scope.events = $firebase(ref);
-}
+		$scope.search = function(){
+			$location.search({search: $scope.searchEvent});	
 
-}])
-.controller('searchCtrl', ["$scope","$location", function($scope, $location) {
-
-	$scope.search = function(){
-		$location.search({search: $scope.searchEvent});
-
-	}
+		}
 }])
 .controller('MessagesCtrl', ["$scope", "$rootScope", "$firebase", "$cookies", "$routeParams", "$route", function($scope, $rootScope, $firebase, $cookies, $routeParams, $route) {
 

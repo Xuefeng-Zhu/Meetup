@@ -49,7 +49,7 @@
       <div class="ui comments">
         <div class="comment" ng-repeat="comment in selectEvent.comments">
           <a class="avatar">
-            <img src="{{comment.pic}}">
+            <img src="{{comment.pic}}" ng-click="sendMessage(comment.author, comment.authorId)">
           </a>
           <div class="content">
             <a class="author">{{comment.author}}</a>
@@ -67,7 +67,7 @@
     <div class="3 fluid ui bottom buttons">
 
       <div class="ui teal button" ng-click="joinEvent()">Join</div>
-      <div class="ui blue button" ng-click="sendMessage()">Contact</div>
+      <div class="ui blue button" ng-click="sendMessage(selectEvent.createrName, selectEvent.createrId)">Contact</div>
       <div class="ui button" ng-click="cancelEvent()">Back</div>
     </div>
   </div>

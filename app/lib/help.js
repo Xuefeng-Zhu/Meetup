@@ -1,3 +1,5 @@
+// Twitter's Typeahead relaed code
+
 var categories = [];
 
 
