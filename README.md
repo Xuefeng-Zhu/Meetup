@@ -1,5 +1,5 @@
 ##CS241 Project Meetup
-https://web.engr.illinois.edu/~xzhu15/meetup/#/
+http://web.engr.illinois.edu/~xzhu15/meetup/#/
 
 ##Presented by: Xuefeng Zhu, Xue Zou
 Work split-up: 
