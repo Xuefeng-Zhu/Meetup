@@ -13,16 +13,16 @@ Our original intention is to make a todo list. Afterwards, we thought it would b
 ##Functionalities 
 A website that helps you plan your schedule: 
 
-	To do lists
-	Details of each task
-	Date to finish
+*	To do lists
+*	Details of each task
+*	Date to finish
 
 A platform where you collaborate with other people:
 
-	Event-sharing
-	Comment/Discuss
-	Instant private messages
-	Demonstrate work to teammates, like drawing and coediting 
+*	Event-sharing
+*	Comment/Discuss
+*	Instant private messages
+*	Demonstrate work to teammates, like drawing and coediting 
 
 ##Thanks to 
 
