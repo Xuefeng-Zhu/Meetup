@@ -41,5 +41,5 @@ A platform where you collaborate with other people:
 *	[Typeahead](http://twitter.github.io/typeahead.js/)
 
 ##License 
-MIT
+[MIT](https://github.com/Xuefeng-Zhu/Meetup2014/blob/master/LICENSE)
 
