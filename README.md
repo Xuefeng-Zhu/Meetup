@@ -1,9 +1,7 @@
 ##CS241 Project Meetup
 [demo](http://web.engr.illinois.edu/~xzhu15/meetup/#/)
 
-##Presented by: Xuefeng Zhu, Xue Zou
-Work split-up: 
-
+##Author
 *	Xuefeng Zhu: UI design, Design database schema, Write most functional code, Brainstorm new ideas and functionality, Debug 
 *	Xue Zou: UI design, data structure design, Facebook log-in, testing
 
