@@ -1,0 +1,60 @@
+<div class="ui labeled icon menu" style="margin-left:auto; margin-right:auto; display:block">
+  <a class="red item" style="width:50%" href="#/Messages/Inbox">
+    <i class="inbox icon"></i>
+    Inbox
+  </a>
+  <a class="teal item" style="width:50%" href="#/Messages/Outbox">
+    <i class="external url icon"></i>
+    Outbox
+  </a>
+</div>
+
+<table class="ui basic table" id="messagebox">
+  <thead>
+    <tr><th class="three wide">{{direction}}</th>
+      <th class="three wide">Event</th>
+      <th class="ten wide">Content</th>
+    </tr></thead>
+    <tbody>
+      <tr ng-class="{unread: !message.read}" ng-repeat="(mid, message) in messages" ng-click="selectMessage(mid, message)">
+        <td ng-show="direction == 'From'">{{message.senderName}}</td>
+        <td ng-show="direction == 'To'">{{message.receiverName}}</td>
+        <td>{{message.event}}</td>
+        <td>{{message.content}}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="ui piled segment fx-zoom-normal fx-easing-bounce fx-speed-600" ng-show="selectedM" style="min-height: 15rem">
+    <div class="ui horizontal divided list">
+      <div class="item">
+        <div class="content">
+          <div class="header">{{direction}}</div>
+          {{selectedM.senderName}}
+        </div>
+      </div>
+      <div class="item">
+        <div class="content">
+          <div class="header">Event</div>
+          {{selectedM.event}}
+        </div>
+      </div>
+      <div class="item">
+        <div class="content">
+          <div class="header">Date</div>
+          {{selectedM.date}}
+        </div>
+      </div>
+    </div>
+    <div class="ui horizontal icon divider">
+      <i class="circular mail outline icon"></i>
+    </div>
+    <p>{{selectedM.content}}</p>
+
+    <div class="ui buttons" style="float:right">
+      <div class="ui positive button" ng-show="direction == 'From'" ng-click="reply()">Reply</div>
+      <div class="ui positive button" ng-show="direction == 'To'" ng-click="resend()">Resend</div>
+      <div class="or"></div>
+      <div class="ui negative button" ng-click="delete()">Delete</div>
+    </div>
+  </div>

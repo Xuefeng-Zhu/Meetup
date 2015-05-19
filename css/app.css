@@ -1,0 +1,175 @@
+/* app css stylesheet */
+
+html,
+body {
+  font-size: 15px;
+  height: 100%;
+}
+
+body {
+  font-family: "Open Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+  background: #FFFFFF;
+  margin: 0px;
+  padding: 0px;
+  color: #555555;
+  text-rendering: optimizeLegibility;
+  min-width: 320px;
+}
+
+#events{
+  overflow-y: scroll;
+  height: 30rem;
+}
+
+#ldock{
+  margin-top: 0rem;
+  margin-bottom: 0rem;
+  padding-left: 0.1%;
+  padding-right: 0%;
+  height: 100%;
+
+}
+
+#searchButton:hover
+{
+  cursor:pointer;
+}
+
+#userpic{
+  display: inline;
+  float: left;
+}
+
+#message{
+  padding-left: 3em;
+  padding-right: 3em;
+}
+
+#setting{
+  display: inline;
+  float: right;
+}
+
+#login{
+  padding-left: 3em;
+  padding-right: 3em;
+}
+
+.dueDate{
+  display: inline;
+  float: right;
+  margin: 0em;
+  color: grey;
+}
+
+i.icon.remove:hover{
+  -webkit-transform: scale(1.5);
+  transform: scale(1.5);
+  color: red;
+  cursor: pointer;
+}
+
+.event:hover{
+  cursor:alias;
+}
+
+.eventDetails{
+  background: url(../images/notebook.png) repeat-y;
+
+}
+
+/*Typeahead CSS from twitter*/
+
+.typeahead,
+.tt-query,
+.tt-hint {
+  width: 300px;
+  padding: 0.65em 1em;
+  font-size: 1em;
+  border: 2px solid #ccc;
+  -webkit-border-radius: 8px;
+     -moz-border-radius: 8px;
+          border-radius: 8px;
+  outline: none;
+}
+
+.typeahead {
+  background-color: #fff;
+}
+
+.typeahead:focus {
+  border: 2px solid #0097cf;
+}
+
+.tt-query {
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+     -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+          box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+
+.tt-hint {
+  color: #999
+}
+
+.tt-dropdown-menu {
+  width: 300px;
+  margin-top: 12px;
+  padding: 8px 0;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  -webkit-border-radius: 8px;
+     -moz-border-radius: 8px;
+          border-radius: 8px;
+  -webkit-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+     -moz-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+          box-shadow: 0 5px 10px rgba(0,0,0,.2);
+}
+
+.tt-suggestion {
+  padding: 3px 20px;
+  font-size: 18px;
+  line-height: 24px;
+  color: #000;
+}
+
+.tt-suggestion.tt-cursor {
+  color: #fff;
+  background-color: #0097cf;
+
+}
+
+.tt-suggestion p {
+  margin: 0;
+}
+
+#colorholder {
+  width: 480px;
+  height: 30px;
+  border: 2px solid #424547;
+  margin-top: 5px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.colorbox {
+  width: 22px;
+  height: 22px;
+  margin: 1px;
+  display: inline-block;
+  border: 3px solid black;
+}
+
+.colorbox:hover{
+  -webkit-transform: scale(1.5);
+  transform: scale(1.5);
+  cursor: pointer;
+}
+
+#coedit-container {
+  position: absolute; left: 0; top: 0; bottom: 0; right: 0;
+}
+
+.unread {
+  font-weight: bold;
+}

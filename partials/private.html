@@ -1,0 +1,129 @@
+<div class="ui teal stacked segment">
+  <form class="ui form" ng-submit="addEvent()">
+   <div class="ui fluid action input">
+     <input type="text" ng-model="concise" placeholder="New Events" ngrequired>
+     <div class="ui teal left labeled icon button" id="datepicker">
+       <i class="calendar icon"></i> Date
+     </div>
+   </div>
+ </form>
+</div>
+
+
+<div class="ui segment event fx-fade-left fx-easing-quad fx-speed-500" ng-repeat="(eid,event) in events | eventFilter:false " ng-click="showEvent(eid)">
+  <div class="ui toggle checkbox">
+    <input type="checkbox" name="event" id="{{eid}}" ng-click="toggleCompleted(eid)">
+    <label for="{{eid}}"></label>
+  </div>
+  <b style="display:inline">{{event.concise}}</b>
+  <p class="dueDate">{{event.date}}</p>
+</div>
+
+<div class="ui horizontal icon divider">
+  <i class="circular attachment icon"></i>
+</div>
+
+
+<div class="ui segment fx-fade-left fx-easing-quad fx-speed-500" ng-repeat="(eid,event) in events | eventFilter:true">
+  <div class="ui toggle checkbox">
+    <input type="checkbox" ng-checked="true" name="event" id="{{eid}}" ng-click="toggleCompleted(eid)">
+    <label for="{{eid}}"></label>
+  </div>
+  <b style="display:inline">{{event.concise}}</b>
+  <i class="large remove icon" style="float:right" ng-click="removeEvent(eid)"></i>
+</div>
+
+
+<div class="ui wide right overlay floating styled sidebar">
+  <h3 class="ui header" style="display:inline">Event Details</h3>
+  <i class="arrow sign right large icon" style="float:right; cursor:pointer" ng-click="cancelEvent()"></i>
+  
+  <div class="ui form">
+
+    <div class="field">
+      <div class="ui left icon input">
+        <i class="checked checkbox icon"></i>
+        <input type="text" placeholder="Event" ng-model="selectEvent.concise">
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="ui left icon input">
+        <i class="calendar icon"></i>
+        <input type="text" placeholder="Date" id="datepicker2" ng-model="selectEvent.date">
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="ui left icon input">
+        <i class="location icon"></i>
+        <input type="text" placeholder="Location" ng-model="selectEvent.location">
+      </div>
+    </div>
+
+    <div class="field">
+      <textarea class="eventDetails" ng-model="selectEvent.details"> </textarea>
+    </div>
+
+    <div class="3 fluid ui bottom buttons">
+      <div class="ui teal button" ng-click="publishEvent()">Publish</div>
+      <div class="ui red button" ng-click="saveEvent()">Save</div>
+      <div class="ui button" ng-click="cancelEvent()">Cancel</div>
+    </div>
+  </div>
+</div>
+
+<div class="ui basic modal" id="confirm-modal">
+  <i class="close icon"></i>
+  <div class="header">
+    Confirm Information
+  </div>
+
+  <div id="the-basics">
+    <input class="typeahead" type="text" placeholder="Event Category">
+  </div>
+
+  <div class="ui form segment">
+
+    <div class="field">
+      <div class="ui left icon input">
+        <i class="checked checkbox icon"></i>
+        <input type="text" placeholder="Event" ng-model="selectEvent.concise">
+      </div>
+    </div>
+    <div class="ui two fields">
+      <div class="field">
+        <div class="ui left icon input">
+          <i class="calendar icon"></i>
+          <input type="text" placeholder="Date" id="datepicker2" ng-model="selectEvent.date">
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="ui left icon input">
+          <i class="location icon"></i>
+          <input type="text" placeholder="Location" ng-model="selectEvent.location">
+        </div>
+      </div>
+    </div>
+    
+    <div class="field">
+      <textarea class="eventDetails" ng-model="selectEvent.details"> </textarea>
+    </div>
+  </div>
+
+
+
+  <div class="actions">
+    <div class="two fluid ui buttons">
+      <div class="ui positive labeled icon button">
+        Yes
+        <i class="checkmark icon"></i>
+      </div>
+      <div class="ui negative right labeled icon button">
+        <i class="remove icon"></i>
+        No
+      </div>
+    </div>
+  </div>
+</div>
