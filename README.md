@@ -1,24 +1,25 @@
-##CS241 Project Meetup
-[demo](http://web.engr.illinois.edu/~xzhu15/meetup/#/)
+# Meetup
 
-##Overview
-Our original intention is to make a todo list. Afterwards, we thought it would be great to socialize our todo list---it means that we can publish events from todo list and let other people join our events, such as shopping, hackathon and homework. The application is then named to “Meetup”, which means that it is a platform that brings people together so that they can meet and work with each other.
+Meetup can be a simple todo list app, but also can be a social platform bringing people together and letting they meet and work with each other.
 
-##Functionalities 
-A website that helps you plan your schedule: 
+## Features 
+Meetup can let you 
 
-*	To do lists
-*	Details of each task
-*	Date to finish
+* Add private todo lists
+* Categorize and search events
+* Share todo list items as public events
+* Comment on each event
+* Send instant messages
+* Collaborate with group of people, like drawing and coediting 
 
-A platform where you collaborate with other people:
+A flow for Meetup can be
 
-*	Event-sharing
-*	Comment/Discuss
-*	Instant private messages
-*	Demonstrate work to teammates, like drawing and coediting 
+1. Create a private todo item
+2. Publish the private todo item
+3. People join events
+4. Collaborate on events 
 
-##Thanks to 
+## Thanks to 
 
 *	[AceEditor](http://ace.c9.io/#nav=about)
 *	[Alertify](http://fabien-d.github.io/alertify.js/)
@@ -36,6 +37,6 @@ A platform where you collaborate with other people:
 *	[Togetherjs](https://togetherjs.com/)
 *	[Typeahead](http://twitter.github.io/typeahead.js/)
 
-##License 
+## License 
 [MIT](https://github.com/Xuefeng-Zhu/Meetup2014/blob/master/LICENSE)
 
